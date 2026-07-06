@@ -4,3 +4,11 @@ package.json
 preview.html
 .DS_Store
 *.log
+
+# Xcode / VinylShelf
+VinylShelf/VinylShelf/Config/DiscogsConfig.swift
+xcuserdata/
+DerivedData/
+*.xcuserstate
+*.xcscmblueprint
+.swiftpm/

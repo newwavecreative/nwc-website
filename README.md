@@ -1,3 +1,7 @@
+> **Also in this repo:** [`VinylShelf/`](VinylShelf/README.md) — an iOS
+> (SwiftUI + SwiftData) vinyl record collection manager with Discogs barcode
+> scanning and iCloud sync. See its README for setup.
+
 # New Wave Creative — Landing
 
 A custom-coded landing page whose structure and animations mirror the reference
