@@ -1,0 +1,35 @@
+name: Deploy to WP Engine
+
+# Deploys the nwc-landing plugin to WP Engine over SSH/rsync on every push.
+# Uses WP Engine's official action: https://github.com/wpengine/github-action-wpe-site-deploy
+#
+# Required repo config (Settings → Secrets and variables → Actions):
+#   Secret   WPE_SSHG_KEY_PRIVATE  = the PRIVATE SSH key whose PUBLIC half is
+#                                    added to your WP Engine profile's SSH Keys.
+#   Variable WPE_ENV               = your WP Engine environment (install) name,
+#                                    e.g. "newwavecreative" (production) or a
+#                                    staging install name.
+
+on:
+  push:
+    branches:
+      - claude/new-wave-landing-template-b7g412
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy nwc-landing plugin to WP Engine
+        uses: wpengine/github-action-wpe-site-deploy@v3
+        with:
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          WPE_ENV: ${{ vars.WPE_ENV }}
+          SRC_PATH: "nwc-landing/"
+          REMOTE_PATH: "wp-content/plugins/nwc-landing/"
+          PHP_LINT: TRUE
+          FLAGS: -azvr --inplace --delete --exclude=".*"

@@ -1,35 +1,21 @@
-<!--
-  New Wave Creative — Landing Template
-  Structure mirrors the reference layout (quad.medvi.org), rebuilt as clean static
-  HTML/CSS/JS. Each <section> below is a self-contained block: to use in Beaver
-  Builder, drop the markup for one section into its own HTML module (styles/scripts
-  are loaded once, globally — see css/styles.css and js/main.js).
-
-  Placeholder copy = Lorem Ipsum. Placeholder imagery = assets/img/placeholder.svg.
-  Swap both for real content without touching layout. Animation hooks:
-    data-reveal          -> fade/slide in on scroll
-    data-reveal-delay    -> stagger (ms)
-    data-parallax="0.2"  -> parallax translate factor
-    data-count="1200"    -> count-up number
--->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>New Wave Creative — Landing Template</title>
-<meta name="description" content="New Wave Creative landing page template.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
-<link rel="icon" href="assets/logo.svg">
-
-<!-- ============================================================= -->
-<!-- SECTION 01 — NAVBAR (transparent over hero, solid on scroll)  -->
-<!-- ============================================================= -->
+<?php
+/**
+ * Landing page markup (all 15 sections). Included by templates/landing-template.php,
+ * which defines $A = plugin assets base URL. Placeholder copy = Lorem Ipsum;
+ * placeholder imagery = assets/img/placeholder.svg — swap for real content or
+ * point <img src> at Media Library URLs.
+ *
+ * Animation hooks: data-reveal | data-reveal-delay | data-parallax | data-count | data-flip
+ */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
+?>
+<!-- SECTION 01 — NAVBAR (transparent over hero, solid on scroll) -->
 <header class="nav" id="nav" data-nav>
   <div class="nav__inner container">
     <a class="nav__logo" href="#top" aria-label="New Wave Creative home">
-      <img class="nav__logo-img nav__logo-img--light" src="assets/logo-white.svg" alt="New Wave Creative">
-      <img class="nav__logo-img nav__logo-img--dark" src="assets/logo.svg" alt="New Wave Creative">
+      <img class="nav__logo-img nav__logo-img--light" src="<?php echo $A; ?>logo-white.svg" alt="New Wave Creative">
+      <img class="nav__logo-img nav__logo-img--dark" src="<?php echo $A; ?>logo.svg" alt="New Wave Creative">
     </a>
     <nav class="nav__links" aria-label="Primary">
       <a href="#work">Work</a>
@@ -42,7 +28,6 @@
       <span></span><span></span><span></span>
     </button>
   </div>
-  <!-- Mobile menu -->
   <div class="nav__mobile" data-mobile-menu>
     <a href="#work">Work</a>
     <a href="#services">Services</a>
@@ -54,20 +39,15 @@
 
 <main id="top">
 
-<!-- ============================================================= -->
-<!-- SECTION 02 — HERO                                             -->
-<!-- ============================================================= -->
+<!-- SECTION 02 — HERO -->
 <section class="hero" id="hero">
   <div class="hero__bg">
-    <img src="assets/img/placeholder.svg" alt="" aria-hidden="true">
+    <img src="<?php echo $A; ?>img/placeholder.svg" alt="" aria-hidden="true">
     <div class="hero__overlay"></div>
   </div>
   <div class="container hero__content">
     <div class="hero__badges" data-reveal>
-      <span class="pill pill--rating">
-        <span class="stars" aria-hidden="true">★★★★★</span>
-        Excellent 4.9 out of 5
-      </span>
+      <span class="pill pill--rating"><span class="stars" aria-hidden="true">★★★★★</span> Excellent 4.9 out of 5</span>
       <span class="pill pill--flag">★ USA Made</span>
     </div>
     <h1 class="hero__title" data-reveal data-reveal-delay="80">
@@ -84,9 +64,7 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 03 — CTA BAND (Text + Button)                         -->
-<!-- ============================================================= -->
+<!-- SECTION 03 — CTA BAND -->
 <section class="ctaband">
   <div class="container ctaband__inner" data-reveal>
     <h2>Lorem ipsum dolor sit amet consectetur</h2>
@@ -94,15 +72,12 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 04 — LOGO BAR (marquee)                               -->
-<!-- ============================================================= -->
+<!-- SECTION 04 — LOGO BAR (marquee) -->
 <section class="logobar" id="work">
   <div class="container">
     <p class="logobar__label" data-reveal>Trusted by teams everywhere</p>
     <div class="marquee" data-marquee>
       <div class="marquee__track">
-        <!-- duplicated set for seamless loop -->
         <span class="logobar__logo">LOGO</span><span class="logobar__logo">BRAND</span>
         <span class="logobar__logo">COMPANY</span><span class="logobar__logo">STUDIO</span>
         <span class="logobar__logo">AGENCY</span><span class="logobar__logo">GROUP</span>
@@ -114,9 +89,7 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 05 — ABOUT / MEET THE TEAM (intro)                    -->
-<!-- ============================================================= -->
+<!-- SECTION 05 — ABOUT / MEET THE TEAM (intro) -->
 <section class="about" id="approach">
   <div class="container about__inner">
     <span class="eyebrow" data-reveal>About Us</span>
@@ -130,9 +103,7 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 06 — FLIP CARDS (parallax scroll)                     -->
-<!-- ============================================================= -->
+<!-- SECTION 06 — FLIP CARDS (parallax scroll) -->
 <section class="flipcards" id="services">
   <h2 class="flipcards__bgtext" aria-hidden="true">SERVICES</h2>
   <div class="container">
@@ -141,7 +112,6 @@
       <h2>Lorem ipsum dolor sit amet</h2>
     </div>
     <div class="flipcards__grid">
-      <!-- Card (click or hover to flip) -->
       <article class="flip" data-flip data-reveal data-parallax="0.06">
         <div class="flip__inner">
           <div class="flip__face flip__front">
@@ -203,9 +173,7 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 07 — STATS (count-up)                                 -->
-<!-- ============================================================= -->
+<!-- SECTION 07 — STATS (count-up) -->
 <section class="stats">
   <div class="container stats__grid">
     <div class="stat" data-reveal>
@@ -227,9 +195,7 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 08 — PROGRAMS (alternating image + list, x3)          -->
-<!-- ============================================================= -->
+<!-- SECTION 08 — PROGRAMS (alternating image + list, x3) -->
 <section class="programs" id="programs">
   <div class="container">
     <div class="section-head" data-reveal>
@@ -238,7 +204,7 @@
     </div>
 
     <div class="program" data-reveal>
-      <div class="program__media"><img src="assets/img/placeholder.svg" alt="Program one"></div>
+      <div class="program__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program one"></div>
       <div class="program__body">
         <h3>Program One</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
@@ -252,7 +218,7 @@
     </div>
 
     <div class="program program--reverse" data-reveal>
-      <div class="program__media"><img src="assets/img/placeholder.svg" alt="Program two"></div>
+      <div class="program__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program two"></div>
       <div class="program__body">
         <h3>Program Two</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
@@ -266,7 +232,7 @@
     </div>
 
     <div class="program" data-reveal>
-      <div class="program__media"><img src="assets/img/placeholder.svg" alt="Program three"></div>
+      <div class="program__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program three"></div>
       <div class="program__body">
         <h3>Program Three</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
@@ -281,9 +247,7 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 09 — BLOG / RESOURCE CARDS (x3)                       -->
-<!-- ============================================================= -->
+<!-- SECTION 09 — BLOG / RESOURCE CARDS (x3) -->
 <section class="blog" id="blog">
   <div class="container">
     <div class="section-head" data-reveal>
@@ -292,7 +256,7 @@
     </div>
     <div class="blog__grid">
       <a class="blogcard" href="#" data-reveal>
-        <div class="blogcard__media"><img src="assets/img/placeholder.svg" alt=""><span class="blogcard__grad"></span></div>
+        <div class="blogcard__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt=""><span class="blogcard__grad"></span></div>
         <div class="blogcard__body">
           <span class="tag">Category</span>
           <h3>Lorem ipsum dolor sit amet consectetur</h3>
@@ -300,7 +264,7 @@
         </div>
       </a>
       <a class="blogcard" href="#" data-reveal data-reveal-delay="100">
-        <div class="blogcard__media"><img src="assets/img/placeholder.svg" alt=""><span class="blogcard__grad"></span></div>
+        <div class="blogcard__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt=""><span class="blogcard__grad"></span></div>
         <div class="blogcard__body">
           <span class="tag">Category</span>
           <h3>Lorem ipsum dolor sit amet consectetur</h3>
@@ -308,7 +272,7 @@
         </div>
       </a>
       <a class="blogcard" href="#" data-reveal data-reveal-delay="200">
-        <div class="blogcard__media"><img src="assets/img/placeholder.svg" alt=""><span class="blogcard__grad"></span></div>
+        <div class="blogcard__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt=""><span class="blogcard__grad"></span></div>
         <div class="blogcard__body">
           <span class="tag">Category</span>
           <h3>Lorem ipsum dolor sit amet consectetur</h3>
@@ -319,9 +283,7 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 10 — COMPARISON TABLE (Us vs Others)                  -->
-<!-- ============================================================= -->
+<!-- SECTION 10 — COMPARISON TABLE (Us vs Others) -->
 <section class="compare">
   <div class="container">
     <div class="section-head" data-reveal>
@@ -358,9 +320,7 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 11 — PRICING (3 plans)                                -->
-<!-- ============================================================= -->
+<!-- SECTION 11 — PRICING (3 plans) -->
 <section class="pricing" id="pricing">
   <div class="container">
     <div class="section-head" data-reveal>
@@ -406,9 +366,7 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 12 — HOW IT WORKS (bento grid)                        -->
-<!-- ============================================================= -->
+<!-- SECTION 12 — HOW IT WORKS (bento grid) -->
 <section class="how" id="how">
   <div class="container">
     <div class="section-head" data-reveal>
@@ -438,9 +396,7 @@
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 13 — TESTIMONIALS (marquee w/ stars)                  -->
-<!-- ============================================================= -->
+<!-- SECTION 13 — TESTIMONIALS (marquee w/ stars) -->
 <section class="testimonials">
   <div class="container">
     <div class="section-head" data-reveal>
@@ -450,55 +406,52 @@
   </div>
   <div class="marquee marquee--cards" data-marquee data-reveal>
     <div class="marquee__track">
-      <!-- one review card, duplicated for seamless loop -->
       <figure class="review">
         <div class="stars">★★★★★</div>
         <blockquote>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.”</blockquote>
-        <figcaption><img src="assets/img/avatar.svg" alt=""><span><strong>Jane Doe</strong>Client</span></figcaption>
+        <figcaption><img src="<?php echo $A; ?>img/avatar.svg" alt=""><span><strong>Jane Doe</strong>Client</span></figcaption>
       </figure>
       <figure class="review">
         <div class="stars">★★★★★</div>
         <blockquote>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.”</blockquote>
-        <figcaption><img src="assets/img/avatar.svg" alt=""><span><strong>John Smith</strong>Client</span></figcaption>
+        <figcaption><img src="<?php echo $A; ?>img/avatar.svg" alt=""><span><strong>John Smith</strong>Client</span></figcaption>
       </figure>
       <figure class="review">
         <div class="stars">★★★★★</div>
         <blockquote>“Lorem ipsum dolor sit amet, consectetur adipiscing elit.”</blockquote>
-        <figcaption><img src="assets/img/avatar.svg" alt=""><span><strong>Amy Lee</strong>Client</span></figcaption>
+        <figcaption><img src="<?php echo $A; ?>img/avatar.svg" alt=""><span><strong>Amy Lee</strong>Client</span></figcaption>
       </figure>
       <figure class="review">
         <div class="stars">★★★★★</div>
         <blockquote>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.”</blockquote>
-        <figcaption><img src="assets/img/avatar.svg" alt=""><span><strong>Carlos Ruiz</strong>Client</span></figcaption>
+        <figcaption><img src="<?php echo $A; ?>img/avatar.svg" alt=""><span><strong>Carlos Ruiz</strong>Client</span></figcaption>
       </figure>
-      <!-- duplicate set -->
+      <!-- duplicate set for seamless loop -->
       <figure class="review">
         <div class="stars">★★★★★</div>
         <blockquote>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.”</blockquote>
-        <figcaption><img src="assets/img/avatar.svg" alt=""><span><strong>Jane Doe</strong>Client</span></figcaption>
+        <figcaption><img src="<?php echo $A; ?>img/avatar.svg" alt=""><span><strong>Jane Doe</strong>Client</span></figcaption>
       </figure>
       <figure class="review">
         <div class="stars">★★★★★</div>
         <blockquote>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.”</blockquote>
-        <figcaption><img src="assets/img/avatar.svg" alt=""><span><strong>John Smith</strong>Client</span></figcaption>
+        <figcaption><img src="<?php echo $A; ?>img/avatar.svg" alt=""><span><strong>John Smith</strong>Client</span></figcaption>
       </figure>
       <figure class="review">
         <div class="stars">★★★★★</div>
         <blockquote>“Lorem ipsum dolor sit amet, consectetur adipiscing elit.”</blockquote>
-        <figcaption><img src="assets/img/avatar.svg" alt=""><span><strong>Amy Lee</strong>Client</span></figcaption>
+        <figcaption><img src="<?php echo $A; ?>img/avatar.svg" alt=""><span><strong>Amy Lee</strong>Client</span></figcaption>
       </figure>
       <figure class="review">
         <div class="stars">★★★★★</div>
         <blockquote>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.”</blockquote>
-        <figcaption><img src="assets/img/avatar.svg" alt=""><span><strong>Carlos Ruiz</strong>Client</span></figcaption>
+        <figcaption><img src="<?php echo $A; ?>img/avatar.svg" alt=""><span><strong>Carlos Ruiz</strong>Client</span></figcaption>
       </figure>
     </div>
   </div>
 </section>
 
-<!-- ============================================================= -->
-<!-- SECTION 14 — CTA TEXT SECTION                                 -->
-<!-- ============================================================= -->
+<!-- SECTION 14 — FINAL CTA -->
 <section class="finalcta" id="contact">
   <div class="container finalcta__inner" data-reveal>
     <h2>Lorem ipsum dolor sit amet consectetur adipiscing</h2>
@@ -509,12 +462,9 @@
 
 </main>
 
-<!-- ============================================================= -->
-<!-- SECTION 15 — FOOTER                                           -->
-<!-- ============================================================= -->
+<!-- SECTION 15 — FOOTER -->
 <footer class="footer">
   <div class="container">
-    <!-- feature row -->
     <div class="footer__features" data-reveal>
       <div class="feature"><span class="feature__icon">◈</span><div><strong>Lorem Ipsum</strong><span>Dolor sit amet consectetur</span></div></div>
       <div class="feature"><span class="feature__icon">✆</span><div><strong>24/7 Support</strong><span>One-on-one guidance</span></div></div>
@@ -523,7 +473,7 @@
 
     <div class="footer__main">
       <div class="footer__brand">
-        <img src="assets/logo.svg" alt="New Wave Creative" class="footer__logo">
+        <img src="<?php echo $A; ?>logo.svg" alt="New Wave Creative" class="footer__logo">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
         <div class="footer__pills">
           <a href="#" class="pill pill--contact">✉ hello@newwavecreative.io</a>
@@ -543,5 +493,3 @@
     </div>
   </div>
 </footer>
-
-<script src="js/main.js"></script>
