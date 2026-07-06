@@ -1,0 +1,122 @@
+/* =============================================================
+   New Wave Creative — Landing Template
+   Animation layer. Vanilla JS, no dependencies. Loaded once globally.
+   Mirrors the reference's Framer-Motion feel with:
+     - scroll reveals (IntersectionObserver)
+     - transparent -> solid navbar on scroll
+     - mobile menu toggle
+     - parallax translate on scroll
+     - flip cards (click / keyboard)
+     - count-up stats
+   All effects no-op gracefully under prefers-reduced-motion.
+   ============================================================= */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 1. Scroll reveal ---------- */
+  var reveals = document.querySelectorAll('[data-reveal]');
+  if (reduce) {
+    reveals.forEach(function (el) { el.classList.add('is-in'); });
+  } else if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
+        setTimeout(function () { el.classList.add('is-in'); }, delay);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+    reveals.forEach(function (el) { io.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('is-in'); });
+  }
+
+  /* ---------- 2. Navbar solid-on-scroll ---------- */
+  var nav = document.querySelector('[data-nav]');
+  if (nav) {
+    var onScrollNav = function () {
+      nav.classList.toggle('is-scrolled', window.scrollY > 40);
+    };
+    onScrollNav();
+    window.addEventListener('scroll', onScrollNav, { passive: true });
+  }
+
+  /* ---------- 3. Mobile menu ---------- */
+  var toggle = document.querySelector('[data-menu-toggle]');
+  if (toggle && nav) {
+    toggle.addEventListener('click', function () {
+      var open = nav.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    nav.querySelectorAll('[data-mobile-menu] a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        nav.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  /* ---------- 4. Parallax ---------- */
+  var parallaxEls = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
+  if (!reduce && parallaxEls.length) {
+    var ticking = false;
+    var applyParallax = function () {
+      var vh = window.innerHeight;
+      parallaxEls.forEach(function (el) {
+        var factor = parseFloat(el.getAttribute('data-parallax')) || 0.1;
+        var rect = el.getBoundingClientRect();
+        var offset = (rect.top + rect.height / 2 - vh / 2) * -factor;
+        el.style.transform = 'translate3d(0,' + offset.toFixed(1) + 'px,0)';
+      });
+      ticking = false;
+    };
+    var requestParallax = function () {
+      if (!ticking) { window.requestAnimationFrame(applyParallax); ticking = true; }
+    };
+    window.addEventListener('scroll', requestParallax, { passive: true });
+    window.addEventListener('resize', requestParallax);
+    applyParallax();
+  }
+
+  /* ---------- 5. Flip cards ---------- */
+  document.querySelectorAll('[data-flip]').forEach(function (card) {
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    var flip = function () { card.classList.toggle('is-flipped'); };
+    card.addEventListener('click', flip);
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+    });
+  });
+
+  /* ---------- 6. Count-up stats ---------- */
+  var counters = document.querySelectorAll('[data-count]');
+  var runCount = function (el) {
+    var target = parseFloat(el.getAttribute('data-count')) || 0;
+    if (reduce) { el.textContent = target.toLocaleString(); return; }
+    var dur = 1600, start = null;
+    var step = function (ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      el.textContent = Math.floor(eased * target).toLocaleString();
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString();
+    };
+    requestAnimationFrame(step);
+  };
+  if ('IntersectionObserver' in window && counters.length) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        runCount(entry.target);
+        cio.unobserve(entry.target);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (el) { cio.observe(el); });
+  } else {
+    counters.forEach(runCount);
+  }
+})();
