@@ -104,8 +104,8 @@ p{margin:0}
    01 — NAVBAR
    ============================================================= */
 .nav{position:fixed;inset:0 0 auto 0;z-index:100;transition:background .35s var(--ease),box-shadow .35s var(--ease);}
-.nav__inner{display:flex;align-items:center;gap:24px;height:76px}
-.nav__logo-img{height:48px;width:auto}
+.nav__inner{display:flex;align-items:center;gap:24px;height:100px}
+.nav__logo-img{height:72px;width:auto}
 .nav__logo-img--dark{display:none}
 .nav__links{display:flex;gap:30px;margin-inline:auto;font-weight:600}
 .nav__links a{color:#fff;opacity:.92;transition:opacity .2s}
@@ -120,7 +120,7 @@ p{margin:0}
 .nav.is-scrolled .nav__links a{color:var(--navy)}
 .nav.is-scrolled .nav__burger span{background:var(--navy)}
 /* mobile menu */
-.nav__mobile{position:fixed;inset:76px 0 auto 0;background:#fff;display:none;flex-direction:column;gap:6px;
+.nav__mobile{position:fixed;inset:100px 0 auto 0;background:#fff;display:none;flex-direction:column;gap:6px;
   padding:18px var(--gutter) 26px;box-shadow:var(--shadow);transform:translateY(-8px);opacity:0;
   transition:.28s var(--ease);pointer-events:none}
 .nav__mobile a{color:var(--navy);font-weight:600;padding:12px 4px;border-bottom:1px solid var(--gray-100)}
