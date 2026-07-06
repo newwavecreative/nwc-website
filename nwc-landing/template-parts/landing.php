@@ -96,7 +96,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
   <div class="container about__inner">
     <span class="eyebrow" data-reveal>About Us</span>
     <h2 class="about__title" data-reveal data-reveal-delay="80">
-      Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod
+      Lorem ipsum dolor sit amet consectetur adipiscing elit <span class="text-accent">sed do eiusmod</span>
     </h2>
     <p class="about__text" data-reveal data-reveal-delay="160">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -108,8 +108,6 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
 <!-- SECTION 06 — FLIP CARDS (parallax scroll) -->
 <section class="flipcards" id="services">
   <h2 class="flipcards__bgtext" aria-hidden="true">SERVICES</h2>
-  <div class="glow-blob glow-blob--sky" style="top:-90px;left:-140px" data-parallax="0.05"></div>
-  <div class="glow-blob glow-blob--gold" style="bottom:-140px;right:-110px" data-parallax="0.08"></div>
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">The Science</span>
@@ -380,19 +378,19 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
     </div>
     <div class="bento">
       <div class="bento__cell bento__cell--lg" data-reveal>
-        <span class="bento__step">01</span>
+        <span class="bento__step">Step 1</span>
         <div class="bento__glow"></div>
         <h3>Choose Your Program</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
       </div>
       <div class="bento__cell" data-reveal data-reveal-delay="100">
-        <span class="bento__step">02</span>
+        <span class="bento__step">Step 2</span>
         <div class="bento__glow"></div>
         <h3>Get Matched</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
       </div>
       <div class="bento__cell" data-reveal data-reveal-delay="200">
-        <span class="bento__step">03</span>
+        <span class="bento__step">Step 3</span>
         <div class="bento__glow"></div>
         <h3>Start Today</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
@@ -403,12 +401,10 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
 
 <!-- SECTION 13 — TESTIMONIALS (marquee w/ stars) -->
 <section class="testimonials">
-  <div class="glow-blob glow-blob--sky" style="top:-60px;right:-140px" data-parallax="0.06"></div>
-  <div class="glow-blob glow-blob--gold" style="bottom:-120px;left:-120px" data-parallax="0.04"></div>
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Testimonials</span>
-      <h2>What Our Clients Say</h2>
+      <h2>What Our <span class="text-accent">Clients Say</span></h2>
     </div>
   </div>
   <div class="marquee marquee--cards" data-marquee data-reveal>
@@ -461,7 +457,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
 <!-- SECTION 14 — FINAL CTA -->
 <section class="finalcta" id="contact">
   <div class="container finalcta__inner" data-reveal>
-    <h2>Lorem ipsum dolor sit amet consectetur adipiscing</h2>
+    <h2>Lorem ipsum dolor sit amet <span class="text-accent">consectetur adipiscing</span></h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
     <a href="#" class="btn btn--gold btn--lg">Find Your Perfect Program</a>
   </div>
