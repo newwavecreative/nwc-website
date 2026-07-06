@@ -104,8 +104,8 @@
      never fight the user. Off for touch and reduced-motion.               */
   var finePointer = window.matchMedia('(pointer:fine)').matches;
   if (!reduce && finePointer && 'requestAnimationFrame' in window) {
-    var WHEEL_SPEED = 1.5;  // distance travelled per wheel notch (1 = native-ish)
-    var EASE = 0.16;        // higher = snappier / less floaty catch-up
+    var WHEEL_SPEED = 2.6;  // distance travelled per wheel notch (1 = native-ish)
+    var EASE = 0.24;        // higher = snappier / less floaty catch-up
     var target = window.scrollY, current = target, raf = null, self = false;
     var maxScroll = function () {
       return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
