@@ -62,6 +62,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
       <a href="#how" class="btn btn--ghost-light btn--lg">How It Works</a>
     </div>
   </div>
+  <a href="#work" class="hero__cue" aria-label="Scroll down"></a>
 </section>
 
 <!-- SECTION 03 — CTA BAND -->
@@ -91,6 +92,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
 
 <!-- SECTION 05 — ABOUT / MEET THE TEAM (intro) -->
 <section class="about" id="approach">
+  <span class="section-watermark" aria-hidden="true">Approach</span>
   <div class="container about__inner">
     <span class="eyebrow" data-reveal>About Us</span>
     <h2 class="about__title" data-reveal data-reveal-delay="80">
@@ -106,6 +108,8 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
 <!-- SECTION 06 — FLIP CARDS (parallax scroll) -->
 <section class="flipcards" id="services">
   <h2 class="flipcards__bgtext" aria-hidden="true">SERVICES</h2>
+  <div class="glow-blob glow-blob--sky" style="top:-90px;left:-140px" data-parallax="0.05"></div>
+  <div class="glow-blob glow-blob--gold" style="bottom:-140px;right:-110px" data-parallax="0.08"></div>
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">The Science</span>
@@ -197,6 +201,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
 
 <!-- SECTION 08 — PROGRAMS (alternating image + list, x3) -->
 <section class="programs" id="programs">
+  <span class="section-watermark" aria-hidden="true">Programs</span>
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Training Programs</span>
@@ -204,7 +209,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
     </div>
 
     <div class="program" data-reveal>
-      <div class="program__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program one"></div>
+      <div class="program__media" data-parallax="0.05"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program one"></div>
       <div class="program__body">
         <h3>Program One</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
@@ -218,7 +223,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
     </div>
 
     <div class="program program--reverse" data-reveal>
-      <div class="program__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program two"></div>
+      <div class="program__media" data-parallax="0.05"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program two"></div>
       <div class="program__body">
         <h3>Program Two</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
@@ -232,7 +237,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
     </div>
 
     <div class="program" data-reveal>
-      <div class="program__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program three"></div>
+      <div class="program__media" data-parallax="0.05"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program three"></div>
       <div class="program__body">
         <h3>Program Three</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
@@ -398,6 +403,8 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
 
 <!-- SECTION 13 — TESTIMONIALS (marquee w/ stars) -->
 <section class="testimonials">
+  <div class="glow-blob glow-blob--sky" style="top:-60px;right:-140px" data-parallax="0.06"></div>
+  <div class="glow-blob glow-blob--gold" style="bottom:-120px;left:-120px" data-parallax="0.04"></div>
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Testimonials</span>

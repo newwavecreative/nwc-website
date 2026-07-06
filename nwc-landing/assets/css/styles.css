@@ -330,8 +330,54 @@ p{margin:0}
 /* =============================================================
    ANIMATION — scroll reveal base states (JS adds .is-in)
    ============================================================= */
-[data-reveal]{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-[data-reveal].is-in{opacity:1;transform:none}
+[data-reveal]{opacity:0;transform:translateY(42px);filter:blur(8px);
+  transition:opacity .8s var(--ease),transform .9s var(--ease),filter .8s var(--ease)}
+[data-reveal].is-in{opacity:1;transform:none;filter:none}
+
+/* =============================================================
+   DEPTH / LAYERING / BACKGROUND ELEMENTS
+   (moves the design toward the reference's layered, parallax feel)
+   ============================================================= */
+
+/* Large watermark text sitting behind a section's content */
+.section-watermark{position:absolute;left:50%;top:6%;transform:translateX(-50%);
+  font-family:var(--font-head);font-weight:800;font-size:clamp(5rem,17vw,15rem);
+  line-height:1;color:currentColor;opacity:.05;pointer-events:none;user-select:none;
+  white-space:nowrap;z-index:0;letter-spacing:-.02em}
+
+/* Soft radial glow blob for decorating dark sections */
+.glow-blob{position:absolute;width:520px;height:520px;border-radius:50%;
+  filter:blur(40px);opacity:.28;pointer-events:none;z-index:0}
+.glow-blob--gold{background:radial-gradient(circle,var(--gold),transparent 62%)}
+.glow-blob--sky{background:radial-gradient(circle,var(--sky),transparent 62%)}
+
+/* Dark sections that follow a light one lift up with a rounded top edge
+   so sections overlap and stack (a modern Framer signature). */
+.flipcards,.testimonials{position:relative;border-top-left-radius:48px;border-top-right-radius:48px;
+  margin-top:-48px;z-index:2;overflow:hidden}
+.flipcards .container,.testimonials .container{position:relative;z-index:1}
+
+/* HERO — parallax background + gentle zoom (driven by JS), scroll cue */
+.hero__bg img{will-change:transform;transform-origin:center}
+.hero__cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:1;
+  width:26px;height:42px;border:2px solid rgba(255,255,255,.5);border-radius:14px;display:grid;justify-items:center}
+.hero__cue::before{content:"";width:4px;height:8px;margin-top:7px;border-radius:2px;
+  background:rgba(255,255,255,.8);animation:cue 1.6s var(--ease) infinite}
+@keyframes cue{0%{transform:translateY(0);opacity:1}70%{transform:translateY(12px);opacity:0}100%{opacity:0}}
+
+/* PROGRAMS — watermark + layered glow/shadow behind each image */
+.programs{position:relative;overflow:hidden}
+.programs>.container{position:relative;z-index:1}
+.program__media{position:relative}
+.program__media::before{content:"";position:absolute;z-index:0;left:-24px;bottom:-24px;
+  width:70%;height:80%;border-radius:var(--radius);
+  background:linear-gradient(150deg,var(--gold),transparent 70%);opacity:.55;filter:blur(34px)}
+.program__media img{position:relative;z-index:1}
+.program--reverse .program__media::before{left:auto;right:-24px}
+
+/* ABOUT — subtle watermark */
+.about{position:relative;overflow:hidden}
+.about>.container{position:relative;z-index:1}
 
 /* =============================================================
    RESPONSIVE
@@ -354,9 +400,16 @@ p{margin:0}
   .review{flex-basis:280px}
 }
 
+/* On small screens the rounded-overlap lift can look cramped — ease it */
+@media (max-width:700px){
+  .flipcards,.testimonials{border-top-left-radius:28px;border-top-right-radius:28px;margin-top:-28px}
+  .program__media::before{display:none}
+}
+
 /* Respect reduced-motion */
 @media (prefers-reduced-motion:reduce){
-  [data-reveal]{opacity:1;transform:none;transition:none}
-  .marquee__track{animation:none}
+  [data-reveal]{opacity:1;transform:none;filter:none;transition:none}
+  .marquee__track,.hero__cue::before{animation:none}
+  .hero__bg img{transform:none !important}
   *{scroll-behavior:auto}
 }

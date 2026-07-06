@@ -60,7 +60,8 @@
 
   /* ---------- 4. Parallax ---------- */
   var parallaxEls = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
-  if (!reduce && parallaxEls.length) {
+  var heroImg = document.querySelector('.hero__bg img');
+  if (!reduce && (parallaxEls.length || heroImg)) {
     var ticking = false;
     var applyParallax = function () {
       var vh = window.innerHeight;
@@ -70,6 +71,14 @@
         var offset = (rect.top + rect.height / 2 - vh / 2) * -factor;
         el.style.transform = 'translate3d(0,' + offset.toFixed(1) + 'px,0)';
       });
+      // Hero image drifts down and zooms slightly as you scroll past it.
+      if (heroImg) {
+        var hy = window.scrollY;
+        if (hy < vh * 1.3) {
+          heroImg.style.transform =
+            'translate3d(0,' + (hy * 0.28).toFixed(1) + 'px,0) scale(' + (1 + hy * 0.00035).toFixed(4) + ')';
+        }
+      }
       ticking = false;
     };
     var requestParallax = function () {
