@@ -13,7 +13,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 ?>
 <!-- SECTION 01 — NAVBAR -->
 <header class="nav" id="nav" data-nav>
-  <div class="nav__inner container">
+  <div class="nav__inner nwc-container">
     <a class="nav__logo" href="#top" aria-label="New Wave Creative home">
       <img class="nav__logo-img nav__logo-img--light" src="<?php echo $A; ?>logo-white.svg" alt="New Wave Creative">
       <img class="nav__logo-img nav__logo-img--dark" src="<?php echo $A; ?>logo.svg" alt="New Wave Creative">
@@ -52,7 +52,7 @@ if ( ! isset( $A ) ) { $A = ''; }
     </video>
     <div class="hero__overlay"></div>
   </div>
-  <div class="container hero__grid">
+  <div class="nwc-container hero__grid">
     <div class="hero__left">
       <div class="hero__badges" data-reveal>
         <span class="pill pill--rating"><span class="stars" aria-hidden="true">★★★★★</span> Excellent 4.9 out of 5</span>
@@ -74,7 +74,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 
 <!-- SECTION 03 — LOGO BAR (marquee) -->
 <section class="logobar" id="work">
-  <div class="container">
+  <div class="nwc-container">
     <p class="logobar__label" data-reveal>Trusted by teams everywhere</p>
     <div class="marquee" data-marquee>
       <div class="marquee__track">
@@ -92,7 +92,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 <!-- SECTION 04 — STATEMENT (centered intro) -->
 <section class="about" id="approach">
   <span class="section-watermark" aria-hidden="true">Approach</span>
-  <div class="container about__inner">
+  <div class="nwc-container about__inner">
     <span class="eyebrow" data-reveal>Our Approach</span>
     <h2 class="about__title" data-reveal data-reveal-delay="80">
       Lorem ipsum dolor sit amet consectetur adipiscing elit <span class="text-accent">sed do eiusmod</span>
@@ -107,7 +107,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 <!-- SECTION 05 — PRODUCT SHOWCASE (card rotates on scroll) -->
 <section class="showcase">
   <span class="section-watermark" aria-hidden="true">Showcase</span>
-  <div class="container showcase__grid">
+  <div class="nwc-container showcase__grid">
     <div class="showcase__stage" data-reveal>
       <div class="showcase__card" data-rotate>
         <img src="<?php echo $A; ?>img/placeholder.svg" alt="Showcase">
@@ -130,7 +130,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 
 <!-- SECTION 06 — STATS (count-up) + heading -->
 <section class="stats">
-  <div class="container">
+  <div class="nwc-container">
     <div class="stats__grid">
       <div class="stat" data-reveal>
         <div class="stat__num"><span data-count="12000">0</span>+</div>
@@ -155,7 +155,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 <!-- SECTION 07 — FEATURE CARDS (stacked: text + large icon, alternating) -->
 <section class="features" id="services">
   <span class="section-watermark" aria-hidden="true">Services</span>
-  <div class="container">
+  <div class="nwc-container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">What We Do</span>
       <h2>Lorem ipsum <span class="text-accent">dolor sit amet</span></h2>
@@ -207,7 +207,7 @@ if ( ! isset( $A ) ) { $A = ''; }
     <img src="<?php echo $A; ?>img/placeholder.svg" alt="" aria-hidden="true">
     <div class="photocta__overlay"></div>
   </div>
-  <div class="container photocta__content" data-reveal>
+  <div class="nwc-container photocta__content" data-reveal>
     <span class="eyebrow eyebrow--light">Lorem ipsum · dolor sit amet</span>
     <h2>Lorem ipsum.<br>Dolor sit amet.</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
@@ -217,7 +217,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 
 <!-- SECTION 09 — COMPARISON (animated line chart) -->
 <section class="compare" id="compare">
-  <div class="container">
+  <div class="nwc-container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Why Choose Us</span>
       <h2>Lorem ipsum <span class="text-accent">dolor sit amet</span></h2>
@@ -256,7 +256,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 
 <!-- SECTION 10 — PRICING (single product) -->
 <section class="pricing" id="pricing">
-  <div class="container">
+  <div class="nwc-container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Simple Pricing</span>
       <h2>Lorem ipsum <span class="text-accent">in one plan</span></h2>
@@ -282,7 +282,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 
 <!-- SECTION 11 — HOW IT WORKS (gradient step cards) -->
 <section class="how" id="how">
-  <div class="container">
+  <div class="nwc-container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">How It Works</span>
       <h2>Lorem ipsum dolor sit <span class="text-accent">amet consectetur</span></h2>
@@ -312,7 +312,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 
 <!-- SECTION 12 — TESTIMONIALS (marquee) -->
 <section class="testimonials">
-  <div class="container">
+  <div class="nwc-container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Testimonials</span>
       <h2>Trusted by <span class="text-accent">10,000+</span> clients</h2>
@@ -367,7 +367,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 
 <!-- SECTION 13 — FINAL CTA -->
 <section class="finalcta" id="contact">
-  <div class="container finalcta__inner" data-reveal>
+  <div class="nwc-container finalcta__inner" data-reveal>
     <h2>Lorem ipsum dolor sit amet <span class="text-accent">consectetur adipiscing</span></h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
     <a href="#" class="btn btn--gold btn--lg">Find Your Perfect Program</a>
@@ -379,7 +379,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 
 <!-- SECTION 14 — FOOTER -->
 <footer class="footer">
-  <div class="container">
+  <div class="nwc-container">
     <div class="footer__features" data-reveal>
       <div class="feature"><span class="feature__icon">◈</span><div><strong>Lorem Ipsum</strong><span>Dolor sit amet consectetur</span></div></div>
       <div class="feature"><span class="feature__icon">✆</span><div><strong>24/7 Support</strong><span>One-on-one guidance</span></div></div>
