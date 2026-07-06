@@ -42,7 +42,12 @@
 }
 
 *{box-sizing:border-box}
+/* The Beaver Builder theme sets html{font-size:10px}, which shrinks every
+   rem-based size on this page. Force the standard 16px root so 1rem = 16px
+   again. Scoped in effect because this stylesheet only loads on this template. */
+html{font-size:16px !important}
 html{scroll-behavior:smooth}
+body{font-size:1rem}
 body{
   margin:0;
   font-family:var(--font-body);
@@ -497,6 +502,18 @@ p{margin:0}
 /* ABOUT — subtle watermark */
 .about{position:relative;overflow:hidden}
 .about>.container{position:relative;z-index:1}
+
+/* =============================================================
+   MINIMUM TEXT SIZE — nothing below 12pt (16px = 1rem)
+   ============================================================= */
+.eyebrow,.stat__label,.tag,.plan__badge,.product__badge,.bento__step,
+.footer__bottom,.feature span,.review figcaption span,.product__note,
+.chart__key,.pill,.hero__badges .pill,.btn,.footer__nav a,.footer__pills .pill{
+  font-size:1rem}
+.chart__axis,.chart__lbl{font-size:16px}
+/* keep the uppercase micro-labels legible but not oversized at the 16px floor */
+.eyebrow{letter-spacing:.1em}
+.stat__label,.bento__step{letter-spacing:.08em}
 
 /* =============================================================
    RESPONSIVE
