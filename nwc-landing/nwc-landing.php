@@ -48,8 +48,9 @@ add_action( 'wp_enqueue_scripts', function () {
 	if ( ! is_page() ) { return; }
 	if ( NWC_LANDING_SLUG !== get_page_template_slug( get_queried_object_id() ) ) { return; }
 
-	$css = NWC_LANDING_DIR . 'assets/css/styles.css';
-	$js  = NWC_LANDING_DIR . 'assets/js/main.js';
+	$css   = NWC_LANDING_DIR . 'assets/css/styles.css';
+	$js    = NWC_LANDING_DIR . 'assets/js/main.js';
+	$lenis = NWC_LANDING_DIR . 'assets/js/lenis.min.js';
 
 	wp_enqueue_style(
 		'nwc-landing-fonts',
@@ -63,10 +64,18 @@ add_action( 'wp_enqueue_scripts', function () {
 		array(),
 		file_exists( $css ) ? filemtime( $css ) : '1.0.0'
 	);
+	// Lenis smooth scroll (the same library Framer/MEDVi use) — loaded first.
+	wp_enqueue_script(
+		'nwc-lenis',
+		NWC_LANDING_URL . 'assets/js/lenis.min.js',
+		array(),
+		file_exists( $lenis ) ? filemtime( $lenis ) : '1.3.25',
+		true
+	);
 	wp_enqueue_script(
 		'nwc-landing',
 		NWC_LANDING_URL . 'assets/js/main.js',
-		array(),
+		array( 'nwc-lenis' ), // ensure Lenis global exists before main.js runs
 		file_exists( $js ) ? filemtime( $js ) : '1.0.0',
 		true // in footer, after DOM
 	);

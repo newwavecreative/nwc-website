@@ -48,6 +48,13 @@
 html{font-size:16px !important}
 html{scroll-behavior:smooth}
 body{font-size:1rem}
+
+/* Lenis smooth scroll — required classes (matches the reference's Framer setup) */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+.lenis.lenis-smooth iframe{pointer-events:none}
 body{
   margin:0;
   font-family:var(--font-body);

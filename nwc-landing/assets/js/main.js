@@ -103,12 +103,27 @@
     applyParallax();
   }
 
-  /* ---------- 4b. Scroll behaviour ----------
-     Native scrolling is used (instant, 1:1 with input, OS trackpad momentum).
-     The earlier JS momentum/lerp added ~150ms of catch-up lag that read as
-     "slow" — removed. The page's soft feel comes from the reveal/parallax
-     animations above, not from hijacking the scroll. Anchor-link jumps still
-     animate smoothly via CSS `scroll-behavior:smooth`. */
+  /* ---------- 4b. Lenis smooth scroll (the library the reference/Framer uses) ----------
+     Tuning knobs:
+       lerp           0.1  -> smoothing; LOWER = smoother/slower, HIGHER = snappier
+       wheelMultiplier 1   -> scroll distance per wheel notch
+     Off under reduced-motion (native scroll). Native scroll events still fire,
+     so the reveal + parallax effects above keep working. */
+  if (!reduce && typeof window.Lenis === 'function') {
+    var lenis = new window.Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
+    window.__nwcLenis = lenis;
+    (function raf(t){ lenis.raf(t); window.requestAnimationFrame(raf); })(0);
+    // Smooth in-page anchor links (#services, etc.), offset for the fixed nav.
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var id = a.getAttribute('href');
+        if (id.length > 1) {
+          var target = document.querySelector(id);
+          if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -76 }); }
+        }
+      });
+    });
+  }
 
   /* ---------- 5. Flip cards ---------- */
   document.querySelectorAll('[data-flip]').forEach(function (card) {
