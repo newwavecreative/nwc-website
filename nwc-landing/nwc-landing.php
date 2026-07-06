@@ -16,6 +16,18 @@ define( 'NWC_LANDING_URL', plugin_dir_url( __FILE__ ) );
 const NWC_LANDING_SLUG = 'nwc-landing';
 
 /**
+ * Versioned asset URL (adds ?v=<filemtime>) so browsers/CDNs always fetch the
+ * current file — otherwise <img>/<video> tags cache indefinitely across deploys.
+ *
+ * @param string $rel path relative to the plugin's assets/ dir, e.g. "logo.png".
+ */
+function nwc_landing_asset( $rel ) {
+	$path = NWC_LANDING_DIR . 'assets/' . ltrim( $rel, '/' );
+	$ver  = file_exists( $path ) ? filemtime( $path ) : '1';
+	return esc_url( NWC_LANDING_URL . 'assets/' . ltrim( $rel, '/' ) . '?v=' . $ver );
+}
+
+/**
  * 1. Add "NWC Landing" to the Page Attributes → Template dropdown.
  *    Works regardless of the active theme (theme_page_templates fires for any theme).
  */

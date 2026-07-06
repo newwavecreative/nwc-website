@@ -15,8 +15,8 @@ if ( ! isset( $A ) ) { $A = ''; }
 <header class="nav" id="nav" data-nav>
   <div class="nav__inner nwc-container">
     <a class="nav__logo" href="#top" aria-label="New Wave Creative home">
-      <img class="nav__logo-img nav__logo-img--light" src="<?php echo $A; ?>logo-white.png" alt="New Wave Creative">
-      <img class="nav__logo-img nav__logo-img--dark" src="<?php echo $A; ?>logo.png" alt="New Wave Creative">
+      <img class="nav__logo-img nav__logo-img--light" src="<?php echo nwc_landing_asset( 'logo-white.png' ); ?>" alt="New Wave Creative">
+      <img class="nav__logo-img nav__logo-img--dark" src="<?php echo nwc_landing_asset( 'logo.png' ); ?>" alt="New Wave Creative">
     </a>
     <nav class="nav__links" aria-label="Primary">
       <a href="#services">Services</a>
@@ -47,8 +47,8 @@ if ( ! isset( $A ) ) { $A = ''; }
          replace assets/video/hero.mp4). muted+playsinline are required for
          autoplay; poster shows instantly + is the fallback. -->
     <video class="hero__media" autoplay muted loop playsinline preload="auto"
-           poster="<?php echo $A; ?>img/hero-poster.jpg" aria-hidden="true">
-      <source src="<?php echo $A; ?>video/hero.mp4" type="video/mp4">
+           poster="<?php echo nwc_landing_asset( 'img/hero-poster.jpg' ); ?>" aria-hidden="true">
+      <source src="<?php echo nwc_landing_asset( 'video/hero.mp4' ); ?>" type="video/mp4">
     </video>
     <div class="hero__overlay"></div>
   </div>
@@ -388,7 +388,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 
     <div class="footer__main">
       <div class="footer__brand">
-        <img src="<?php echo $A; ?>logo.png" alt="New Wave Creative" class="footer__logo">
+        <img src="<?php echo nwc_landing_asset( 'logo.png' ); ?>" alt="New Wave Creative" class="footer__logo">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
         <div class="footer__pills">
           <a href="#" class="pill pill--contact">✉ hello@newwavecreative.io</a>
