@@ -65,7 +65,7 @@ if ( ! isset( $A ) ) { $A = ''; }
         tempor incididunt ut labore et dolore magna aliqua.</p>
       <div class="hero__actions">
         <a href="#pricing" class="btn btn--gold btn--lg">Find Your Perfect Program</a>
-        <a href="#approach" class="btn btn--ghost-light btn--lg">Learn More</a>
+        <a href="#approach" class="hero__link">Learn more →</a>
       </div>
     </div>
   </div>
@@ -128,93 +128,74 @@ if ( ! isset( $A ) ) { $A = ''; }
   </div>
 </section>
 
-<!-- SECTION 06 — STATS (count-up) -->
+<!-- SECTION 06 — STATS (count-up) + heading -->
 <section class="stats">
-  <div class="container stats__grid">
-    <div class="stat" data-reveal>
-      <div class="stat__num"><span data-count="12000">0</span>+</div>
-      <div class="stat__label">Active Members</div>
+  <div class="container">
+    <div class="stats__grid">
+      <div class="stat" data-reveal>
+        <div class="stat__num"><span data-count="12000">0</span>+</div>
+        <div class="stat__label">Active Members</div>
+      </div>
+      <div class="stat" data-reveal data-reveal-delay="100">
+        <div class="stat__num"><span data-count="48">0</span></div>
+        <div class="stat__label">Programs</div>
+      </div>
+      <div class="stat" data-reveal data-reveal-delay="200">
+        <div class="stat__num"><span data-count="99">0</span>%</div>
+        <div class="stat__label">Satisfaction</div>
+      </div>
     </div>
-    <div class="stat" data-reveal data-reveal-delay="100">
-      <div class="stat__num"><span data-count="48">0</span></div>
-      <div class="stat__label">Programs</div>
-    </div>
-    <div class="stat" data-reveal data-reveal-delay="200">
-      <div class="stat__num"><span data-count="99">0</span>%</div>
-      <div class="stat__label">Satisfaction</div>
-    </div>
-    <div class="stat" data-reveal data-reveal-delay="300">
-      <div class="stat__num"><span data-count="15">0</span>+</div>
-      <div class="stat__label">Years Experience</div>
+    <div class="stats__headline" data-reveal>
+      <h2>Lorem ipsum dolor <span class="text-accent">for your goals</span></h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.</p>
     </div>
   </div>
 </section>
 
-<!-- SECTION 07 — FEATURE CARDS (flip on click) -->
-<section class="flipcards" id="services">
+<!-- SECTION 07 — FEATURE CARDS (stacked: text + large icon, alternating) -->
+<section class="features" id="services">
   <span class="section-watermark" aria-hidden="true">Services</span>
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">What We Do</span>
       <h2>Lorem ipsum <span class="text-accent">dolor sit amet</span></h2>
     </div>
-    <div class="flipcards__grid">
-      <article class="flip" data-flip data-reveal>
-        <div class="flip__inner">
-          <div class="flip__face flip__front">
-            <div class="flip__icon">◇</div>
-            <h3>Lorem Ipsum</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <span class="flip__more">More +</span>
-          </div>
-          <div class="flip__face flip__back">
-            <h4>Details</h4>
-            <ul>
-              <li><strong>Ingredient</strong> — Lorem ipsum dolor</li>
-              <li><strong>Mechanism</strong> — Consectetur elit</li>
-              <li><strong>Benefit</strong> — Sed do eiusmod</li>
-            </ul>
-            <span class="flip__close">Close ×</span>
-          </div>
+    <div class="feature-list">
+      <article class="featurecard" data-reveal>
+        <div class="featurecard__body">
+          <h3>Lorem Ipsum Dolor</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <ul class="checklist">
+            <li>Lorem ipsum dolor sit amet</li>
+            <li>Consectetur adipiscing elit</li>
+            <li>Sed do eiusmod tempor</li>
+          </ul>
         </div>
+        <div class="featurecard__icon" aria-hidden="true">◇</div>
       </article>
-      <article class="flip" data-flip data-reveal data-reveal-delay="100">
-        <div class="flip__inner">
-          <div class="flip__face flip__front">
-            <div class="flip__icon">△</div>
-            <h3>Dolor Sit</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <span class="flip__more">More +</span>
-          </div>
-          <div class="flip__face flip__back">
-            <h4>Details</h4>
-            <ul>
-              <li><strong>Ingredient</strong> — Lorem ipsum dolor</li>
-              <li><strong>Mechanism</strong> — Consectetur elit</li>
-              <li><strong>Benefit</strong> — Sed do eiusmod</li>
-            </ul>
-            <span class="flip__close">Close ×</span>
-          </div>
+      <article class="featurecard" data-reveal data-reveal-delay="80">
+        <div class="featurecard__body">
+          <h3>Consectetur Elit</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <ul class="checklist">
+            <li>Lorem ipsum dolor sit amet</li>
+            <li>Consectetur adipiscing elit</li>
+            <li>Sed do eiusmod tempor</li>
+          </ul>
         </div>
+        <div class="featurecard__icon" aria-hidden="true">△</div>
       </article>
-      <article class="flip" data-flip data-reveal data-reveal-delay="200">
-        <div class="flip__inner">
-          <div class="flip__face flip__front">
-            <div class="flip__icon">○</div>
-            <h3>Amet Elit</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <span class="flip__more">More +</span>
-          </div>
-          <div class="flip__face flip__back">
-            <h4>Details</h4>
-            <ul>
-              <li><strong>Ingredient</strong> — Lorem ipsum dolor</li>
-              <li><strong>Mechanism</strong> — Consectetur elit</li>
-              <li><strong>Benefit</strong> — Sed do eiusmod</li>
-            </ul>
-            <span class="flip__close">Close ×</span>
-          </div>
+      <article class="featurecard" data-reveal data-reveal-delay="160">
+        <div class="featurecard__body">
+          <h3>Sed Do Eiusmod</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <ul class="checklist">
+            <li>Lorem ipsum dolor sit amet</li>
+            <li>Consectetur adipiscing elit</li>
+            <li>Sed do eiusmod tempor</li>
+          </ul>
         </div>
+        <div class="featurecard__icon" aria-hidden="true">○</div>
       </article>
     </div>
   </div>
@@ -259,6 +240,11 @@ if ( ! isset( $A ) ) { $A = ''; }
           points="60,300 200,255 340,215 480,160 620,110 800,60"></polyline>
         <circle class="chart__dot chart__dot--us" cx="800" cy="60" r="7"></circle>
         <circle class="chart__dot chart__dot--them" cx="800" cy="300" r="7"></circle>
+        <text class="chart__axis" x="60" y="344">Start</text>
+        <text class="chart__axis" x="800" y="344" text-anchor="end">Now</text>
+        <text class="chart__axis" x="20" y="185" transform="rotate(-90 20 185)" text-anchor="middle">Results</text>
+        <text class="chart__lbl chart__lbl--us" x="792" y="46" text-anchor="end">New Wave</text>
+        <text class="chart__lbl chart__lbl--them" x="792" y="322" text-anchor="end">The Old Way</text>
       </svg>
       <div class="chart__legend">
         <span class="chart__key chart__key--us">New Wave</span>
@@ -280,7 +266,7 @@ if ( ! isset( $A ) ) { $A = ''; }
       <div class="product__card">
         <span class="product__badge">Most Popular</span>
         <h3 class="product__name">The Complete Plan</h3>
-        <div class="product__price"><span class="plan__cur">$</span>114<span class="plan__per">/mo</span></div>
+        <div class="product__price"><span class="plan__cur">$</span>114<span class="plan__per">/mo</span><span class="product__was">$149</span></div>
         <ul class="checklist">
           <li>Lorem ipsum dolor sit amet</li>
           <li>Consectetur adipiscing elit</li>
@@ -329,7 +315,7 @@ if ( ! isset( $A ) ) { $A = ''; }
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Testimonials</span>
-      <h2>What Our <span class="text-accent">Clients Say</span></h2>
+      <h2>Trusted by <span class="text-accent">10,000+</span> clients</h2>
     </div>
   </div>
   <div class="marquee marquee--cards" data-marquee data-reveal>
@@ -385,6 +371,7 @@ if ( ! isset( $A ) ) { $A = ''; }
     <h2>Lorem ipsum dolor sit amet <span class="text-accent">consectetur adipiscing</span></h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
     <a href="#" class="btn btn--gold btn--lg">Find Your Perfect Program</a>
+    <div class="trustbadge"><span class="stars">★★★★★</span> Excellent 4.9 out of 5 · Trustpilot</div>
   </div>
 </section>
 
