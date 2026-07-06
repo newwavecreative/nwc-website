@@ -15,8 +15,8 @@ if ( ! isset( $A ) ) { $A = ''; }
 <header class="nav" id="nav" data-nav>
   <div class="nav__inner nwc-container">
     <a class="nav__logo" href="#top" aria-label="New Wave Creative home">
-      <img class="nav__logo-img nav__logo-img--light" src="<?php echo $A; ?>logo-white.svg" alt="New Wave Creative">
-      <img class="nav__logo-img nav__logo-img--dark" src="<?php echo $A; ?>logo.svg" alt="New Wave Creative">
+      <img class="nav__logo-img nav__logo-img--light" src="<?php echo $A; ?>logo-white.png" alt="New Wave Creative">
+      <img class="nav__logo-img nav__logo-img--dark" src="<?php echo $A; ?>logo.png" alt="New Wave Creative">
     </a>
     <nav class="nav__links" aria-label="Primary">
       <a href="#services">Services</a>
@@ -388,7 +388,7 @@ if ( ! isset( $A ) ) { $A = ''; }
 
     <div class="footer__main">
       <div class="footer__brand">
-        <img src="<?php echo $A; ?>logo.svg" alt="New Wave Creative" class="footer__logo">
+        <img src="<?php echo $A; ?>logo.png" alt="New Wave Creative" class="footer__logo">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
         <div class="footer__pills">
           <a href="#" class="pill pill--contact">✉ hello@newwavecreative.io</a>
