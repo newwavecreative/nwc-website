@@ -28,7 +28,9 @@ jobs:
         uses: wpengine/github-action-wpe-site-deploy@v3
         with:
           WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
-          WPE_ENV: ${{ vars.WPE_ENV }}
+          # Install/environment name. Uses the WPE_ENV repo Variable if set,
+          # otherwise falls back to the production install name below.
+          WPE_ENV: ${{ vars.WPE_ENV || 'newwavecreativ' }}
           SRC_PATH: "nwc-landing/"
           REMOTE_PATH: "wp-content/plugins/nwc-landing/"
           PHP_LINT: TRUE
