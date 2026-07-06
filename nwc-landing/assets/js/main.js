@@ -82,7 +82,7 @@
         var rect = el.getBoundingClientRect();
         var progress = 1 - (rect.top + rect.height / 2) / (vh + rect.height); // ~0 entering .. ~1 leaving
         progress = Math.max(0, Math.min(1, progress));
-        var rotY = -24 + progress * 30;   // -24deg -> +6deg
+        var rotY = -10 + progress * 16;   // -10deg -> +6deg (subtle)
         el.style.transform = 'rotateY(' + rotY.toFixed(1) + 'deg)';
       });
       // Hero image drifts down and zooms slightly as you scroll past it.

@@ -128,15 +128,16 @@ p{margin:0}
   background:linear-gradient(180deg,rgba(8,47,63,.45),rgba(8,47,63,.85)),
              linear-gradient(90deg,rgba(8,47,63,.55),transparent 60%)}
 /* two-column: headline left, copy + CTA right, aligned to the bottom */
-.hero__grid{position:relative;z-index:1;width:100%;display:grid;grid-template-columns:1.2fr .85fr;
-  gap:48px;align-items:end;padding-top:100px;padding-bottom:min(11vh,120px)}
+/* single left-aligned column: badges, headline, copy, CTAs all stacked left */
+.hero__grid{position:relative;z-index:1;width:100%;display:grid;grid-template-columns:min(100%,640px);
+  gap:22px;align-items:end;justify-content:start;padding-top:100px;padding-bottom:min(11vh,120px)}
 .hero__badges{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:26px}
 /* rating shown as plain text (no filled chip), like the reference */
 .hero__badges .pill{background:transparent;backdrop-filter:none;padding:0;font-size:.9rem}
 .hero__badges .pill--flag{opacity:.85}
 .hero__title{font-size:clamp(2.8rem,7.5vw,5.6rem);color:#fff;letter-spacing:-.03em;line-height:.98}
 .hero__right{padding-bottom:8px}
-.hero__sub{margin:0;font-size:clamp(1rem,1.3vw,1.12rem);max-width:420px;opacity:.9}
+.hero__sub{margin:0;font-size:clamp(1rem,1.3vw,1.12rem);max-width:540px;opacity:.9}
 .hero__actions{display:flex;gap:22px;flex-wrap:wrap;align-items:center;margin-top:26px}
 .hero__link{color:#fff;font-weight:700;opacity:.9;transition:opacity .2s}
 .hero__link:hover{opacity:1}
