@@ -1,16 +1,17 @@
 <?php
 /**
- * Landing page markup (all 15 sections). Included by templates/landing-template.php,
- * which defines $A = plugin assets base URL. Placeholder copy = Lorem Ipsum;
- * placeholder imagery = assets/img/placeholder.svg — swap for real content or
- * point <img src> at Media Library URLs.
+ * Landing page markup — section order mirrors the reference (quad.medvi.org):
+ *   nav · hero · logos · statement · product showcase · stats · feature cards ·
+ *   photo CTA · comparison chart · pricing · how it works · testimonials · CTA · footer
  *
- * Animation hooks: data-reveal | data-reveal-delay | data-parallax | data-count | data-flip
+ * Included by templates/landing-template.php, which defines $A = plugin assets base URL.
+ * Placeholder copy = Lorem Ipsum; placeholder imagery = assets/img/placeholder.svg.
+ * Animation hooks: data-reveal | data-reveal-delay | data-parallax | data-rotate | data-count | data-flip
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
+if ( ! isset( $A ) ) { $A = ''; }
 ?>
-<!-- SECTION 01 — NAVBAR (transparent over hero, solid on scroll) -->
+<!-- SECTION 01 — NAVBAR -->
 <header class="nav" id="nav" data-nav>
   <div class="nav__inner container">
     <a class="nav__logo" href="#top" aria-label="New Wave Creative home">
@@ -18,10 +19,10 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
       <img class="nav__logo-img nav__logo-img--dark" src="<?php echo $A; ?>logo.svg" alt="New Wave Creative">
     </a>
     <nav class="nav__links" aria-label="Primary">
-      <a href="#work">Work</a>
       <a href="#services">Services</a>
       <a href="#approach">Approach</a>
-      <a href="#blog">Blog</a>
+      <a href="#work">Work</a>
+      <a href="#pricing">Pricing</a>
     </nav>
     <a href="#contact" class="btn btn--gold nav__cta">Contact Us</a>
     <button class="nav__burger" aria-label="Open menu" aria-expanded="false" data-menu-toggle>
@@ -29,51 +30,43 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
     </button>
   </div>
   <div class="nav__mobile" data-mobile-menu>
-    <a href="#work">Work</a>
     <a href="#services">Services</a>
     <a href="#approach">Approach</a>
-    <a href="#blog">Blog</a>
+    <a href="#work">Work</a>
+    <a href="#pricing">Pricing</a>
     <a href="#contact" class="btn btn--gold">Contact Us</a>
   </div>
 </header>
 
 <main id="top">
 
-<!-- SECTION 02 — HERO -->
+<!-- SECTION 02 — HERO (two-column: headline left, copy + CTA right) -->
 <section class="hero" id="hero">
   <div class="hero__bg">
     <img src="<?php echo $A; ?>img/placeholder.svg" alt="" aria-hidden="true">
     <div class="hero__overlay"></div>
   </div>
-  <div class="container hero__content">
-    <div class="hero__badges" data-reveal>
-      <span class="pill pill--rating"><span class="stars" aria-hidden="true">★★★★★</span> Excellent 4.9 out of 5</span>
-      <span class="pill pill--flag">★ USA Made</span>
+  <div class="container hero__grid">
+    <div class="hero__left">
+      <div class="hero__badges" data-reveal>
+        <span class="pill pill--rating"><span class="stars" aria-hidden="true">★★★★★</span> Excellent 4.9 out of 5</span>
+        <span class="pill pill--flag">★ USA Made</span>
+      </div>
+      <h1 class="hero__title" data-reveal data-reveal-delay="80">Ipsum.<br>Dolor.<br>Amet.</h1>
     </div>
-    <h1 class="hero__title" data-reveal data-reveal-delay="80">
-      Lorem ipsum dolor <span class="text-gold">sit amet</span> consectetur elit
-    </h1>
-    <p class="hero__sub" data-reveal data-reveal-delay="160">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.
-    </p>
-    <div class="hero__actions" data-reveal data-reveal-delay="240">
-      <a href="#pricing" class="btn btn--gold btn--lg">Find Your Perfect Program</a>
-      <a href="#how" class="btn btn--ghost-light btn--lg">How It Works</a>
+    <div class="hero__right" data-reveal data-reveal-delay="180">
+      <p class="hero__sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.</p>
+      <div class="hero__actions">
+        <a href="#pricing" class="btn btn--gold btn--lg">Find Your Perfect Program</a>
+        <a href="#approach" class="btn btn--ghost-light btn--lg">Learn More</a>
+      </div>
     </div>
   </div>
   <a href="#work" class="hero__cue" aria-label="Scroll down"></a>
 </section>
 
-<!-- SECTION 03 — CTA BAND -->
-<section class="ctaband">
-  <div class="container ctaband__inner" data-reveal>
-    <h2>Lorem ipsum dolor sit amet consectetur</h2>
-    <a href="#contact" class="btn btn--gold btn--lg">Get Started</a>
-  </div>
-</section>
-
-<!-- SECTION 04 — LOGO BAR (marquee) -->
+<!-- SECTION 03 — LOGO BAR (marquee) -->
 <section class="logobar" id="work">
   <div class="container">
     <p class="logobar__label" data-reveal>Trusted by teams everywhere</p>
@@ -90,11 +83,11 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
   </div>
 </section>
 
-<!-- SECTION 05 — ABOUT / MEET THE TEAM (intro) -->
+<!-- SECTION 04 — STATEMENT (centered intro) -->
 <section class="about" id="approach">
   <span class="section-watermark" aria-hidden="true">Approach</span>
   <div class="container about__inner">
-    <span class="eyebrow" data-reveal>About Us</span>
+    <span class="eyebrow" data-reveal>Our Approach</span>
     <h2 class="about__title" data-reveal data-reveal-delay="80">
       Lorem ipsum dolor sit amet consectetur adipiscing elit <span class="text-accent">sed do eiusmod</span>
     </h2>
@@ -105,16 +98,62 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
   </div>
 </section>
 
-<!-- SECTION 06 — FLIP CARDS (parallax scroll) -->
+<!-- SECTION 05 — PRODUCT SHOWCASE (card rotates on scroll) -->
+<section class="showcase">
+  <span class="section-watermark" aria-hidden="true">Showcase</span>
+  <div class="container showcase__grid">
+    <div class="showcase__stage" data-reveal>
+      <div class="showcase__card" data-rotate>
+        <img src="<?php echo $A; ?>img/placeholder.svg" alt="Showcase">
+      </div>
+    </div>
+    <div class="showcase__body" data-reveal data-reveal-delay="140">
+      <span class="eyebrow">The Difference</span>
+      <h2>Lorem ipsum dolor <span class="text-accent">sit amet</span></h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua.</p>
+      <ul class="checklist">
+        <li>Lorem ipsum dolor sit amet</li>
+        <li>Consectetur adipiscing elit</li>
+        <li>Sed do eiusmod tempor incididunt</li>
+      </ul>
+      <a href="#pricing" class="btn btn--dark">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 06 — STATS (count-up) -->
+<section class="stats">
+  <div class="container stats__grid">
+    <div class="stat" data-reveal>
+      <div class="stat__num"><span data-count="12000">0</span>+</div>
+      <div class="stat__label">Active Members</div>
+    </div>
+    <div class="stat" data-reveal data-reveal-delay="100">
+      <div class="stat__num"><span data-count="48">0</span></div>
+      <div class="stat__label">Programs</div>
+    </div>
+    <div class="stat" data-reveal data-reveal-delay="200">
+      <div class="stat__num"><span data-count="99">0</span>%</div>
+      <div class="stat__label">Satisfaction</div>
+    </div>
+    <div class="stat" data-reveal data-reveal-delay="300">
+      <div class="stat__num"><span data-count="15">0</span>+</div>
+      <div class="stat__label">Years Experience</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 07 — FEATURE CARDS (flip on click) -->
 <section class="flipcards" id="services">
-  <h2 class="flipcards__bgtext" aria-hidden="true">SERVICES</h2>
+  <span class="section-watermark" aria-hidden="true">Services</span>
   <div class="container">
     <div class="section-head" data-reveal>
-      <span class="eyebrow">The Science</span>
-      <h2>Lorem ipsum dolor sit amet</h2>
+      <span class="eyebrow">What We Do</span>
+      <h2>Lorem ipsum <span class="text-accent">dolor sit amet</span></h2>
     </div>
     <div class="flipcards__grid">
-      <article class="flip" data-flip data-reveal data-parallax="0.06">
+      <article class="flip" data-flip data-reveal>
         <div class="flip__inner">
           <div class="flip__face flip__front">
             <div class="flip__icon">◇</div>
@@ -133,7 +172,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
           </div>
         </div>
       </article>
-      <article class="flip" data-flip data-reveal data-reveal-delay="100" data-parallax="0.12">
+      <article class="flip" data-flip data-reveal data-reveal-delay="100">
         <div class="flip__inner">
           <div class="flip__face flip__front">
             <div class="flip__icon">△</div>
@@ -152,7 +191,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
           </div>
         </div>
       </article>
-      <article class="flip" data-flip data-reveal data-reveal-delay="200" data-parallax="0.18">
+      <article class="flip" data-flip data-reveal data-reveal-delay="200">
         <div class="flip__inner">
           <div class="flip__face flip__front">
             <div class="flip__icon">○</div>
@@ -175,206 +214,86 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
   </div>
 </section>
 
-<!-- SECTION 07 — STATS (count-up) -->
-<section class="stats">
-  <div class="container stats__grid">
-    <div class="stat" data-reveal>
-      <div class="stat__num"><span data-count="12000">0</span>+</div>
-      <div class="stat__label">Active Members</div>
-    </div>
-    <div class="stat" data-reveal data-reveal-delay="100">
-      <div class="stat__num"><span data-count="48">0</span></div>
-      <div class="stat__label">Programs</div>
-    </div>
-    <div class="stat" data-reveal data-reveal-delay="200">
-      <div class="stat__num"><span data-count="99">0</span>%</div>
-      <div class="stat__label">Satisfaction</div>
-    </div>
-    <div class="stat" data-reveal data-reveal-delay="300">
-      <div class="stat__num"><span data-count="15">0</span>+</div>
-      <div class="stat__label">Years Experience</div>
-    </div>
+<!-- SECTION 08 — PHOTO CTA (full-bleed image) -->
+<section class="photocta">
+  <div class="photocta__bg" data-parallax="0.08">
+    <img src="<?php echo $A; ?>img/placeholder.svg" alt="" aria-hidden="true">
+    <div class="photocta__overlay"></div>
+  </div>
+  <div class="container photocta__content" data-reveal>
+    <span class="eyebrow eyebrow--light">Lorem ipsum · dolor sit amet</span>
+    <h2>Lorem ipsum.<br>Dolor sit amet.</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+    <a href="#contact" class="btn btn--gold btn--lg">Get Started</a>
   </div>
 </section>
 
-<!-- SECTION 08 — PROGRAMS (alternating image + list, x3) -->
-<section class="programs" id="programs">
-  <span class="section-watermark" aria-hidden="true">Programs</span>
-  <div class="container">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">Training Programs</span>
-      <h2>Lorem ipsum dolor sit amet consectetur</h2>
-    </div>
-
-    <div class="program" data-reveal>
-      <div class="program__media" data-parallax="0.05"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program one"></div>
-      <div class="program__body">
-        <h3>Program One</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
-        <ul class="checklist">
-          <li>Lorem ipsum dolor sit amet</li>
-          <li>Consectetur adipiscing elit</li>
-          <li>Sed do eiusmod tempor</li>
-        </ul>
-        <a href="#pricing" class="btn btn--dark">Learn More</a>
-      </div>
-    </div>
-
-    <div class="program program--reverse" data-reveal>
-      <div class="program__media" data-parallax="0.05"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program two"></div>
-      <div class="program__body">
-        <h3>Program Two</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
-        <ul class="checklist">
-          <li>Lorem ipsum dolor sit amet</li>
-          <li>Consectetur adipiscing elit</li>
-          <li>Sed do eiusmod tempor</li>
-        </ul>
-        <a href="#pricing" class="btn btn--dark">Learn More</a>
-      </div>
-    </div>
-
-    <div class="program" data-reveal>
-      <div class="program__media" data-parallax="0.05"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Program three"></div>
-      <div class="program__body">
-        <h3>Program Three</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
-        <ul class="checklist">
-          <li>Lorem ipsum dolor sit amet</li>
-          <li>Consectetur adipiscing elit</li>
-          <li>Sed do eiusmod tempor</li>
-        </ul>
-        <a href="#pricing" class="btn btn--dark">Learn More</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 09 — BLOG / RESOURCE CARDS (x3) -->
-<section class="blog" id="blog">
-  <div class="container">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">From the Blog</span>
-      <h2>Lorem ipsum dolor sit amet</h2>
-    </div>
-    <div class="blog__grid">
-      <a class="blogcard" href="#" data-reveal>
-        <div class="blogcard__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt=""><span class="blogcard__grad"></span></div>
-        <div class="blogcard__body">
-          <span class="tag">Category</span>
-          <h3>Lorem ipsum dolor sit amet consectetur</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-      </a>
-      <a class="blogcard" href="#" data-reveal data-reveal-delay="100">
-        <div class="blogcard__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt=""><span class="blogcard__grad"></span></div>
-        <div class="blogcard__body">
-          <span class="tag">Category</span>
-          <h3>Lorem ipsum dolor sit amet consectetur</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-      </a>
-      <a class="blogcard" href="#" data-reveal data-reveal-delay="200">
-        <div class="blogcard__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt=""><span class="blogcard__grad"></span></div>
-        <div class="blogcard__body">
-          <span class="tag">Category</span>
-          <h3>Lorem ipsum dolor sit amet consectetur</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 10 — COMPARISON TABLE (Us vs Others) -->
-<section class="compare">
+<!-- SECTION 09 — COMPARISON (animated line chart) -->
+<section class="compare" id="compare">
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Why Choose Us</span>
-      <h2>Lorem ipsum dolor sit amet</h2>
+      <h2>Lorem ipsum <span class="text-accent">dolor sit amet</span></h2>
     </div>
-    <div class="compare__table" data-reveal>
-      <div class="compare__row compare__row--head">
-        <div class="compare__feature"></div>
-        <div class="compare__col compare__col--us">New Wave</div>
-        <div class="compare__col">Others</div>
-      </div>
-      <div class="compare__row">
-        <div class="compare__feature">Lorem ipsum dolor sit amet</div>
-        <div class="compare__col compare__col--us"><span class="yes">✓</span></div>
-        <div class="compare__col"><span class="no">✕</span></div>
-      </div>
-      <div class="compare__row">
-        <div class="compare__feature">Consectetur adipiscing elit</div>
-        <div class="compare__col compare__col--us"><span class="yes">✓</span></div>
-        <div class="compare__col"><span class="no">✕</span></div>
-      </div>
-      <div class="compare__row">
-        <div class="compare__feature">Sed do eiusmod tempor</div>
-        <div class="compare__col compare__col--us"><span class="yes">✓</span></div>
-        <div class="compare__col"><span class="no">✕</span></div>
-      </div>
-      <div class="compare__row">
-        <div class="compare__feature">Incididunt ut labore</div>
-        <div class="compare__col compare__col--us"><span class="yes">✓</span></div>
-        <div class="compare__col"><span class="no">✕</span></div>
+    <div class="chart" data-reveal>
+      <svg class="chart__svg" viewBox="0 0 820 380" role="img" aria-label="New Wave vs Others over time">
+        <!-- grid -->
+        <g class="chart__grid">
+          <line x1="60" y1="40"  x2="60"  y2="320"></line>
+          <line x1="60" y1="320" x2="800" y2="320"></line>
+          <line x1="60" y1="110" x2="800" y2="110"></line>
+          <line x1="60" y1="180" x2="800" y2="180"></line>
+          <line x1="60" y1="250" x2="800" y2="250"></line>
+        </g>
+        <!-- Others: flat / declining -->
+        <polyline class="chart__line chart__line--them"
+          points="60,250 200,255 340,262 480,270 620,285 800,300"></polyline>
+        <!-- New Wave: rising -->
+        <polyline class="chart__line chart__line--us"
+          points="60,300 200,255 340,215 480,160 620,110 800,60"></polyline>
+        <circle class="chart__dot chart__dot--us" cx="800" cy="60" r="7"></circle>
+        <circle class="chart__dot chart__dot--them" cx="800" cy="300" r="7"></circle>
+      </svg>
+      <div class="chart__legend">
+        <span class="chart__key chart__key--us">New Wave</span>
+        <span class="chart__key chart__key--them">The Old Way</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SECTION 11 — PRICING (3 plans) -->
+<!-- SECTION 10 — PRICING (single product) -->
 <section class="pricing" id="pricing">
   <div class="container">
     <div class="section-head" data-reveal>
-      <span class="eyebrow">Choose the Plan</span>
-      <h2>Lorem ipsum dolor sit amet</h2>
+      <span class="eyebrow">Simple Pricing</span>
+      <h2>Lorem ipsum <span class="text-accent">in one plan</span></h2>
     </div>
-    <div class="pricing__grid">
-      <div class="plan" data-reveal>
-        <h3 class="plan__name">Starter</h3>
-        <div class="plan__price"><span class="plan__cur">$</span>49<span class="plan__per">/mo</span></div>
+    <div class="product" data-reveal>
+      <div class="product__media"><img src="<?php echo $A; ?>img/placeholder.svg" alt="Product"></div>
+      <div class="product__card">
+        <span class="product__badge">Most Popular</span>
+        <h3 class="product__name">The Complete Plan</h3>
+        <div class="product__price"><span class="plan__cur">$</span>114<span class="plan__per">/mo</span></div>
         <ul class="checklist">
-          <li>Lorem ipsum dolor</li>
-          <li>Consectetur elit</li>
-          <li>Sed do eiusmod</li>
-          <li>Tempor incididunt</li>
-        </ul>
-        <a href="#contact" class="btn btn--dark btn--block">Choose Plan</a>
-      </div>
-      <div class="plan plan--featured" data-reveal data-reveal-delay="100">
-        <span class="plan__badge">Most Popular</span>
-        <h3 class="plan__name">Pro</h3>
-        <div class="plan__price"><span class="plan__cur">$</span>99<span class="plan__per">/mo</span></div>
-        <ul class="checklist">
-          <li>Everything in Starter</li>
-          <li>Lorem ipsum dolor</li>
-          <li>Consectetur elit</li>
+          <li>Lorem ipsum dolor sit amet</li>
+          <li>Consectetur adipiscing elit</li>
           <li>Sed do eiusmod tempor</li>
+          <li>Incididunt ut labore</li>
         </ul>
-        <a href="#contact" class="btn btn--gold btn--block">Choose Plan</a>
-      </div>
-      <div class="plan" data-reveal data-reveal-delay="200">
-        <h3 class="plan__name">Elite</h3>
-        <div class="plan__price"><span class="plan__cur">$</span>199<span class="plan__per">/mo</span></div>
-        <ul class="checklist">
-          <li>Everything in Pro</li>
-          <li>Lorem ipsum dolor</li>
-          <li>Consectetur elit</li>
-          <li>Dedicated support</li>
-        </ul>
-        <a href="#contact" class="btn btn--dark btn--block">Choose Plan</a>
+        <a href="#contact" class="btn btn--gold btn--block btn--lg">Get Started</a>
+        <p class="product__note">Lorem ipsum · cancel anytime · no hidden fees</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SECTION 12 — HOW IT WORKS (bento grid) -->
+<!-- SECTION 11 — HOW IT WORKS (gradient step cards) -->
 <section class="how" id="how">
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">How It Works</span>
-      <h2>Lorem ipsum dolor sit amet consectetur</h2>
+      <h2>Lorem ipsum dolor sit <span class="text-accent">amet consectetur</span></h2>
     </div>
     <div class="bento">
       <div class="bento__cell bento__cell--lg" data-reveal>
@@ -399,7 +318,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
   </div>
 </section>
 
-<!-- SECTION 13 — TESTIMONIALS (marquee w/ stars) -->
+<!-- SECTION 12 — TESTIMONIALS (marquee) -->
 <section class="testimonials">
   <div class="container">
     <div class="section-head" data-reveal>
@@ -454,7 +373,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
   </div>
 </section>
 
-<!-- SECTION 14 — FINAL CTA -->
+<!-- SECTION 13 — FINAL CTA -->
 <section class="finalcta" id="contact">
   <div class="container finalcta__inner" data-reveal>
     <h2>Lorem ipsum dolor sit amet <span class="text-accent">consectetur adipiscing</span></h2>
@@ -465,7 +384,7 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
 
 </main>
 
-<!-- SECTION 15 — FOOTER -->
+<!-- SECTION 14 — FOOTER -->
 <footer class="footer">
   <div class="container">
     <div class="footer__features" data-reveal>
@@ -484,8 +403,8 @@ if ( ! isset( $A ) ) { $A = ''; } // fallback if included directly
         </div>
       </div>
       <nav class="footer__nav">
-        <div><h4>Company</h4><a href="#work">Work</a><a href="#services">Services</a><a href="#approach">Approach</a><a href="#blog">Blog</a></div>
-        <div><h4>Programs</h4><a href="#programs">Program One</a><a href="#programs">Program Two</a><a href="#programs">Program Three</a><a href="#pricing">Pricing</a></div>
+        <div><h4>Company</h4><a href="#services">Services</a><a href="#approach">Approach</a><a href="#work">Work</a><a href="#pricing">Pricing</a></div>
+        <div><h4>Explore</h4><a href="#services">What We Do</a><a href="#how">How It Works</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a></div>
         <div><h4>Legal</h4><a href="#">Terms &amp; Conditions</a><a href="#">Privacy Policy</a><a href="#">Refund Policy</a><a href="#">Contact</a></div>
       </nav>
     </div>

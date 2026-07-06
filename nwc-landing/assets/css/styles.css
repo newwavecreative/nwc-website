@@ -121,15 +121,20 @@ p{margin:0}
 /* =============================================================
    02 — HERO
    ============================================================= */
-.hero{position:relative;min-height:100svh;display:flex;align-items:center;color:#fff;overflow:hidden}
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;color:#fff;overflow:hidden}
 .hero__bg{position:absolute;inset:0;z-index:0}
 .hero__bg img{width:100%;height:100%;object-fit:cover}
-.hero__overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,47,63,.55),rgba(8,47,63,.82))}
-.hero__content{position:relative;z-index:1;max-width:760px;padding-top:76px}
-.hero__badges{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}
-.hero__title{font-size:clamp(2.4rem,6vw,4.4rem);color:#fff;letter-spacing:-.02em}
-.hero__sub{margin:20px 0 0;font-size:clamp(1.05rem,2vw,1.25rem);max-width:560px;opacity:.9}
-.hero__actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.hero__overlay{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(8,47,63,.45),rgba(8,47,63,.85)),
+             linear-gradient(90deg,rgba(8,47,63,.55),transparent 60%)}
+/* two-column: headline left, copy + CTA right, aligned to the bottom */
+.hero__grid{position:relative;z-index:1;width:100%;display:grid;grid-template-columns:1.2fr .85fr;
+  gap:48px;align-items:end;padding-top:100px;padding-bottom:min(11vh,120px)}
+.hero__badges{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+.hero__title{font-size:clamp(2.8rem,7.5vw,5.6rem);color:#fff;letter-spacing:-.03em;line-height:.98}
+.hero__right{padding-bottom:8px}
+.hero__sub{margin:0;font-size:clamp(1.05rem,1.6vw,1.25rem);opacity:.92}
+.hero__actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
 
 /* =============================================================
    03 — CTA BAND
@@ -344,6 +349,78 @@ p{margin:0}
 [data-reveal]{opacity:0;transform:translateY(42px);filter:blur(8px);
   transition:opacity .8s var(--ease),transform .9s var(--ease),filter .8s var(--ease)}
 [data-reveal].is-in{opacity:1;transform:none;filter:none}
+
+/* =============================================================
+   NEW SECTIONS (reference-matched): showcase, photo CTA, chart, product
+   ============================================================= */
+.eyebrow--light{color:rgba(255,255,255,.85)}
+
+/* 05 — PRODUCT SHOWCASE (card rotates on scroll) */
+.showcase{position:relative;overflow:hidden;padding-block:clamp(64px,9vw,120px);background:var(--white)}
+.showcase__grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(32px,6vw,72px);align-items:center}
+.showcase__stage{perspective:1600px;display:flex;justify-content:center}
+.showcase__card{width:min(100%,400px);border-radius:24px;overflow:hidden;box-shadow:var(--shadow);
+  transform:rotateY(-18deg);transform-style:preserve-3d;will-change:transform}
+.showcase__card img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+.showcase__body h2{font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:16px}
+.showcase__body p{color:var(--gray-500);margin-bottom:22px;font-size:1.08rem}
+.showcase__body .checklist{margin-bottom:28px}
+
+/* 08 — PHOTO CTA */
+.photocta{position:relative;min-height:70vh;display:flex;align-items:flex-end;overflow:hidden;color:#fff}
+.photocta__bg{position:absolute;inset:-12% 0;z-index:0}
+.photocta__bg img{width:100%;height:100%;object-fit:cover}
+.photocta__overlay{position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(8,47,63,.88),rgba(8,47,63,.2) 65%),
+             linear-gradient(180deg,transparent,rgba(8,47,63,.55))}
+.photocta__content{position:relative;z-index:1;max-width:620px;padding-block:clamp(56px,9vw,110px)}
+.photocta__content h2{color:#fff;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.05;margin:14px 0 16px}
+.photocta__content p{color:rgba(255,255,255,.85);margin-bottom:28px;font-size:1.1rem}
+
+/* 09 — COMPARISON CHART */
+.compare{padding-block:clamp(64px,9vw,120px)}
+.chart{max-width:860px;margin-inline:auto;background:#fff;border:1px solid var(--gray-100);
+  border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:clamp(20px,4vw,36px)}
+.chart__svg{width:100%;height:auto;display:block}
+.chart__grid line{stroke:var(--gray-100);stroke-width:1.5}
+.chart__line{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:1300;stroke-dashoffset:1300;transition:stroke-dashoffset 1.9s var(--ease)}
+.chart.is-in .chart__line{stroke-dashoffset:0}
+.chart__line--us{stroke:var(--accent)}
+.chart__line--them{stroke:#c3cfd8}
+.chart__dot{opacity:0;transition:opacity .4s ease 1.5s}
+.chart.is-in .chart__dot{opacity:1}
+.chart__dot--us{fill:var(--accent)}
+.chart__dot--them{fill:#c3cfd8}
+.chart__legend{display:flex;gap:26px;justify-content:center;margin-top:20px;font-weight:600;font-size:.95rem}
+.chart__key{display:flex;align-items:center;gap:8px;color:var(--gray-500)}
+.chart__key::before{content:"";width:14px;height:14px;border-radius:4px;background:currentColor}
+.chart__key--us::before{background:var(--accent)}
+.chart__key--them::before{background:#c3cfd8}
+
+/* 10 — PRICING (single product) */
+.product{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,56px);align-items:center;
+  background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:clamp(24px,4vw,48px);max-width:940px;margin-inline:auto}
+.product__media{display:flex;justify-content:center}
+.product__media img{width:100%;max-width:360px;aspect-ratio:3/4;object-fit:cover;border-radius:var(--radius-sm)}
+.product__badge{display:inline-block;background:var(--gold);color:var(--navy);font-weight:800;font-size:.72rem;
+  text-transform:uppercase;letter-spacing:.06em;padding:6px 14px;border-radius:999px;margin-bottom:14px}
+.product__name{font-size:clamp(1.4rem,3vw,2rem);margin-bottom:6px}
+.product__price{font-family:var(--font-head);font-weight:800;font-size:clamp(2.6rem,6vw,3.6rem);
+  line-height:1;color:var(--navy);margin-bottom:22px}
+.product__card .checklist{margin-bottom:26px}
+.product__note{margin-top:14px;color:var(--gray-500);font-size:.88rem;text-align:center}
+
+@media (max-width:820px){
+  .hero{align-items:center}
+  .hero__grid{grid-template-columns:1fr;align-items:start;gap:26px;padding-bottom:14vh}
+  .hero__right{padding-bottom:0}
+  .showcase__grid,.product{grid-template-columns:1fr}
+  .showcase__stage{order:-1}
+  .product__media img{max-width:280px}
+}
 
 /* =============================================================
    DEPTH / LAYERING / BACKGROUND ELEMENTS

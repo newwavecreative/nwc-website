@@ -58,10 +58,11 @@
     });
   }
 
-  /* ---------- 4. Parallax ---------- */
+  /* ---------- 4. Parallax + hero zoom + showcase card rotation ---------- */
   var parallaxEls = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
+  var rotateEls = Array.prototype.slice.call(document.querySelectorAll('[data-rotate]'));
   var heroImg = document.querySelector('.hero__bg img');
-  if (!reduce && (parallaxEls.length || heroImg)) {
+  if (!reduce && (parallaxEls.length || rotateEls.length || heroImg)) {
     var ticking = false;
     var applyParallax = function () {
       var vh = window.innerHeight;
@@ -70,6 +71,14 @@
         var rect = el.getBoundingClientRect();
         var offset = (rect.top + rect.height / 2 - vh / 2) * -factor;
         el.style.transform = 'translate3d(0,' + offset.toFixed(1) + 'px,0)';
+      });
+      // Showcase card turns toward the viewer as it scrolls through the viewport.
+      rotateEls.forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        var progress = 1 - (rect.top + rect.height / 2) / (vh + rect.height); // ~0 entering .. ~1 leaving
+        progress = Math.max(0, Math.min(1, progress));
+        var rotY = -24 + progress * 30;   // -24deg -> +6deg
+        el.style.transform = 'rotateY(' + rotY.toFixed(1) + 'deg)';
       });
       // Hero image drifts down and zooms slightly as you scroll past it.
       if (heroImg) {
@@ -87,6 +96,34 @@
     window.addEventListener('scroll', requestParallax, { passive: true });
     window.addEventListener('resize', requestParallax);
     applyParallax();
+  }
+
+  /* ---------- 4b. Softer momentum scroll (desktop, wheel only) ----------
+     Lerps wheel scrolling for a gentler feel. Native scrollbar, keyboard,
+     and touch still work: any non-wheel scroll re-syncs the target so we
+     never fight the user. Off for touch and reduced-motion.               */
+  var finePointer = window.matchMedia('(pointer:fine)').matches;
+  if (!reduce && finePointer && 'requestAnimationFrame' in window) {
+    var target = window.scrollY, current = target, raf = null, self = false;
+    var maxScroll = function () {
+      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    };
+    var loop = function () {
+      current += (target - current) * 0.11;
+      if (Math.abs(target - current) < 0.4) { current = target; raf = null; }
+      self = true; window.scrollTo(0, current); self = false;
+      if (raf !== null) raf = window.requestAnimationFrame(loop);
+    };
+    window.addEventListener('wheel', function (e) {
+      if (e.ctrlKey) return;                 // let pinch-zoom through
+      e.preventDefault();
+      target = Math.max(0, Math.min(target + e.deltaY, maxScroll()));
+      if (raf === null) raf = window.requestAnimationFrame(loop);
+    }, { passive: false });
+    // Re-sync when the user scrolls by any other means (scrollbar/keyboard/anchor).
+    window.addEventListener('scroll', function () {
+      if (!self) { target = current = window.scrollY; }
+    }, { passive: true });
   }
 
   /* ---------- 5. Flip cards ---------- */
