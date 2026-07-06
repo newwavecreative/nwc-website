@@ -388,7 +388,6 @@ if ( ! isset( $A ) ) { $A = ''; }
 
     <div class="footer__main">
       <div class="footer__brand">
-        <img src="<?php echo nwc_landing_asset( 'logo-footer.png' ); ?>" alt="New Wave Creative" class="footer__logo">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
         <div class="footer__pills">
           <a href="#" class="pill pill--contact">✉ hello@newwavecreative.io</a>
