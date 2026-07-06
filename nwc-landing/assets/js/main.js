@@ -61,7 +61,12 @@
   /* ---------- 4. Parallax + hero zoom + showcase card rotation ---------- */
   var parallaxEls = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
   var rotateEls = Array.prototype.slice.call(document.querySelectorAll('[data-rotate]'));
-  var heroImg = document.querySelector('.hero__bg img');
+  var heroImg = document.querySelector('.hero__bg video, .hero__bg img');
+  // Reduced-motion: hold the hero video on its poster frame instead of looping.
+  if (reduce) {
+    var hv = document.querySelector('.hero__bg video');
+    if (hv) { hv.removeAttribute('autoplay'); hv.pause && hv.pause(); }
+  }
   if (!reduce && (parallaxEls.length || rotateEls.length || heroImg)) {
     var ticking = false;
     var applyParallax = function () {

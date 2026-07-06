@@ -43,7 +43,13 @@ if ( ! isset( $A ) ) { $A = ''; }
 <!-- SECTION 02 — HERO (two-column: headline left, copy + CTA right) -->
 <section class="hero" id="hero">
   <div class="hero__bg">
-    <img src="<?php echo $A; ?>img/placeholder.svg" alt="" aria-hidden="true">
+    <!-- Background video loop. Swap the .mp4 for your own (Media Library URL or
+         replace assets/video/hero.mp4). muted+playsinline are required for
+         autoplay; poster shows instantly + is the fallback. -->
+    <video class="hero__media" autoplay muted loop playsinline preload="auto"
+           poster="<?php echo $A; ?>img/hero-poster.jpg" aria-hidden="true">
+      <source src="<?php echo $A; ?>video/hero.mp4" type="video/mp4">
+    </video>
     <div class="hero__overlay"></div>
   </div>
   <div class="container hero__grid">
