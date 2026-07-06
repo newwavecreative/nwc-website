@@ -105,7 +105,7 @@ p{margin:0}
    ============================================================= */
 .nav{position:fixed;inset:0 0 auto 0;z-index:100;transition:background .35s var(--ease),box-shadow .35s var(--ease);}
 .nav__inner{display:flex;align-items:center;gap:24px;height:76px}
-.nav__logo-img{height:38px;width:auto}
+.nav__logo-img{height:48px;width:auto}
 .nav__logo-img--dark{display:none}
 .nav__links{display:flex;gap:30px;margin-inline:auto;font-weight:600}
 .nav__links a{color:#fff;opacity:.92;transition:opacity .2s}
