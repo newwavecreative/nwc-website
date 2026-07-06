@@ -48,6 +48,8 @@
 html{font-size:16px !important}
 html{scroll-behavior:smooth}
 body{font-size:1rem}
+/* Page is light-only — prevents browser/OS auto-dark from inverting the logo */
+:root{color-scheme:light}
 
 /* Lenis smooth scroll — required classes (matches the reference's Framer setup) */
 html.lenis,html.lenis body{height:auto}

@@ -15,6 +15,10 @@ $A = esc_url( NWC_LANDING_URL . 'assets/' );
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- This landing page is designed light-only. Tell browsers + dark-mode tools
+	     not to force-dark it (which was inverting the transparent logo to white). -->
+	<meta name="color-scheme" content="light">
+	<meta name="darkreader-lock">
 	<?php wp_head(); ?>
 </head>
 <body <?php body_class( 'nwc-landing-page' ); ?>>
