@@ -98,35 +98,12 @@
     applyParallax();
   }
 
-  /* ---------- 4b. Softer momentum scroll (desktop, wheel only) ----------
-     Lerps wheel scrolling for a gentler feel. Native scrollbar, keyboard,
-     and touch still work: any non-wheel scroll re-syncs the target so we
-     never fight the user. Off for touch and reduced-motion.               */
-  var finePointer = window.matchMedia('(pointer:fine)').matches;
-  if (!reduce && finePointer && 'requestAnimationFrame' in window) {
-    var WHEEL_SPEED = 2.6;  // distance travelled per wheel notch (1 = native-ish)
-    var EASE = 0.24;        // higher = snappier / less floaty catch-up
-    var target = window.scrollY, current = target, raf = null, self = false;
-    var maxScroll = function () {
-      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    };
-    var loop = function () {
-      current += (target - current) * EASE;
-      if (Math.abs(target - current) < 0.4) { current = target; raf = null; }
-      self = true; window.scrollTo(0, current); self = false;
-      if (raf !== null) raf = window.requestAnimationFrame(loop);
-    };
-    window.addEventListener('wheel', function (e) {
-      if (e.ctrlKey) return;                 // let pinch-zoom through
-      e.preventDefault();
-      target = Math.max(0, Math.min(target + e.deltaY * WHEEL_SPEED, maxScroll()));
-      if (raf === null) raf = window.requestAnimationFrame(loop);
-    }, { passive: false });
-    // Re-sync when the user scrolls by any other means (scrollbar/keyboard/anchor).
-    window.addEventListener('scroll', function () {
-      if (!self) { target = current = window.scrollY; }
-    }, { passive: true });
-  }
+  /* ---------- 4b. Scroll behaviour ----------
+     Native scrolling is used (instant, 1:1 with input, OS trackpad momentum).
+     The earlier JS momentum/lerp added ~150ms of catch-up lag that read as
+     "slow" — removed. The page's soft feel comes from the reveal/parallax
+     animations above, not from hijacking the scroll. Anchor-link jumps still
+     animate smoothly via CSS `scroll-behavior:smooth`. */
 
   /* ---------- 5. Flip cards ---------- */
   document.querySelectorAll('[data-flip]').forEach(function (card) {
