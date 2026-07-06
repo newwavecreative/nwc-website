@@ -374,7 +374,7 @@ p{margin:0}
 .feature strong{display:block;color:var(--navy)}
 .feature span{font-size:.9rem}
 .footer__main{display:grid;grid-template-columns:1.4fr 2fr;gap:48px;margin-bottom:44px}
-.footer__logo{height:42px;margin-bottom:18px}
+.footer__logo{height:60px;width:auto;margin-bottom:18px}
 .footer__brand p{max-width:340px;margin-bottom:18px}
 .footer__pills{display:flex;flex-wrap:wrap;gap:10px}
 .footer__pills .pill{background:var(--white);color:var(--navy);border:1px solid var(--gray-100)}
