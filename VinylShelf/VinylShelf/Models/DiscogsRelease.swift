@@ -102,14 +102,16 @@ struct DiscogsRelease: Codable, Identifiable, Hashable {
         tracklist = try container.decodeIfPresent([DiscogsTrack].self, forKey: .tracklist)
 
         let images = (try? container.decode([DiscogsImage].self, forKey: .images)) ?? []
+        let resolvedCover: String?
         if let cover = try container.decodeIfPresent(String.self, forKey: .coverImage) {
-            coverImage = cover
+            resolvedCover = cover
         } else {
             let primary = images.first { $0.type?.lowercased() == "primary" } ?? images.first
-            coverImage = primary?.uri
+            resolvedCover = primary?.uri
         }
+        coverImage = resolvedCover
         backCoverImage = images.first {
-            $0.type?.lowercased() == "secondary" && $0.uri != nil && $0.uri != coverImage
+            $0.type?.lowercased() == "secondary" && $0.uri != nil && $0.uri != resolvedCover
         }?.uri
 
         if let searchBarcodes = try? container.decode([String].self, forKey: .barcode) {
