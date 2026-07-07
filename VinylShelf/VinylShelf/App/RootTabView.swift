@@ -8,7 +8,9 @@ struct RootTabView: View {
             TabView {
                 CollectionView()
                     .tabItem {
-                        Label("My Shelf", systemImage: "square.grid.2x2.fill")
+                        // Brand record mark (template asset generated from
+                        // Design/assets/logo-mark.svg geometry).
+                        Label("My Shelf", image: "TabShelf")
                     }
 
                 WishlistView()
