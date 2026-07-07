@@ -39,6 +39,7 @@ struct RecordStore {
             if existing.isInWishlist && !toWishlist {
                 existing.isInWishlist = false
                 try context.save()
+                Analytics.track(AnalyticsEvent.recordAdded, ["destination": "shelf", "via": "wishlistMove"])
                 return .movedToCollection
             }
             return .alreadyExists
@@ -47,6 +48,7 @@ struct RecordStore {
         let record = VinylRecord(release: release, isInWishlist: toWishlist)
         context.insert(record)
         try context.save()
+        Analytics.track(AnalyticsEvent.recordAdded, ["destination": toWishlist ? "wishlist" : "shelf"])
         return .inserted
     }
 }

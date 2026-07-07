@@ -10,6 +10,8 @@ struct VinylShelfApp: App {
         VSTheme.registerFonts()
         Self.configureChromeAppearance()
         container = Self.makeContainer()
+        Analytics.start()
+        Analytics.track(AnalyticsEvent.appLaunched)
     }
 
     var body: some Scene {

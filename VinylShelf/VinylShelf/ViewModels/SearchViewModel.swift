@@ -61,6 +61,7 @@ final class SearchViewModel {
             let results = try await service.searchByQuery(query)
             guard !Task.isCancelled else { return }
             state = .loaded(results)
+            Analytics.track(AnalyticsEvent.searchPerformed, ["results": results.isEmpty ? "none" : "some"])
         } catch let error as DiscogsError {
             guard !Task.isCancelled else { return }
             state = .failed(error)

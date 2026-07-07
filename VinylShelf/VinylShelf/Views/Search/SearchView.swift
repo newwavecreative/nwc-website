@@ -93,11 +93,20 @@ struct SearchView: View {
     private var results: some View {
         switch viewModel.state {
         case .idle:
-            EmptyStateView(
-                systemImage: "magnifyingglass",
-                title: "Search For Vinyl",
-                message: "Find releases by artist, album title, or catalog number."
-            )
+            VStack(spacing: 0) {
+                EmptyStateView(
+                    systemImage: "magnifyingglass",
+                    title: "Search For Vinyl",
+                    message: "Find releases by artist, album title, or catalog number."
+                )
+
+                // Required attribution per the Discogs API terms.
+                Text("Data provided by Discogs")
+                    .font(.vsMono(11))
+                    .kerning(0.4)
+                    .foregroundStyle(Color.vsTextMuted)
+                    .padding(.bottom, 20)
+            }
         case .loading:
             LoadingView(message: "Digging through the crates…")
         case .loaded(let releases):

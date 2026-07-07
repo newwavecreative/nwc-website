@@ -39,6 +39,10 @@ final class ScannerViewModel {
             default:
                 phase = .multiple(results)
             }
+            Analytics.track(
+                AnalyticsEvent.scanCompleted,
+                ["matches": results.isEmpty ? "none" : (results.count == 1 ? "single" : "multiple")]
+            )
         } catch let error as DiscogsError {
             phase = .failed(error)
         } catch {

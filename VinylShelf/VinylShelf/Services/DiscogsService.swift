@@ -30,6 +30,8 @@ final class DiscogsService {
 
     private let session: URLSession
     private let token: String
+    private let consumerKey: String
+    private let consumerSecret: String
     private let rateLimiter: RateLimiter
     private let retryBaseDelay: TimeInterval
     private let maxRetries: Int
@@ -41,12 +43,16 @@ final class DiscogsService {
     init(
         session: URLSession = .shared,
         token: String = DiscogsConfig.apiToken,
+        consumerKey: String = DiscogsConfig.consumerKey,
+        consumerSecret: String = DiscogsConfig.consumerSecret,
         rateLimiter: RateLimiter = RateLimiter(maxRequests: 60, per: 60),
         retryBaseDelay: TimeInterval = 1,
         maxRetries: Int = 4
     ) {
         self.session = session
         self.token = token
+        self.consumerKey = consumerKey
+        self.consumerSecret = consumerSecret
         self.rateLimiter = rateLimiter
         self.retryBaseDelay = retryBaseDelay
         self.maxRetries = maxRetries
@@ -124,11 +130,28 @@ final class DiscogsService {
             url: Self.baseURL.appending(path: path),
             resolvingAgainstBaseURL: false
         )!
-        // The token is appended here and must never be logged or printed.
-        components.queryItems = queryItems + [URLQueryItem(name: "token", value: token)]
+        // Credentials are appended here and must never be logged or printed.
+        components.queryItems = queryItems + authQueryItems
 
         var request = URLRequest(url: components.url!)
         request.setValue(Self.userAgent, forHTTPHeaderField: "User-Agent")
         return request
+    }
+
+    /// App-level key/secret auth (production — no user Discogs account
+    /// needed; Discogs throttles per device IP). Falls back to the personal
+    /// access token for development when key/secret aren't configured.
+    private var authQueryItems: [URLQueryItem] {
+        if Self.isConfigured(consumerKey), Self.isConfigured(consumerSecret) {
+            return [
+                URLQueryItem(name: "key", value: consumerKey),
+                URLQueryItem(name: "secret", value: consumerSecret),
+            ]
+        }
+        return [URLQueryItem(name: "token", value: token)]
+    }
+
+    private static func isConfigured(_ value: String) -> Bool {
+        !value.isEmpty && !value.hasPrefix("YOUR_")
     }
 }

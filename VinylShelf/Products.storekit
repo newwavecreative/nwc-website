@@ -1,0 +1,85 @@
+{
+  "identifier" : "F4E8A1D0-9C3B-4E7A-B2D5-1A6C8E0F3B92",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "F0A2C4E6-8B1D-4F3A-9E5C-7D0B2A4C6E81",
+      "localizations" : [
+
+      ],
+      "name" : "Vinyl Shelf Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "1.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "A1B2C3D4-0001-4000-8000-000000000001",
+          "introductoryOffer" : {
+            "internalID" : "A1B2C3D4-0002-4000-8000-000000000002",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1M"
+          },
+          "localizations" : [
+            {
+              "description" : "All of Vinyl Shelf, billed monthly.",
+              "displayName" : "Pro Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.newwavecreative.vinylshelf.pro.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Pro Monthly",
+          "subscriptionGroupID" : "F0A2C4E6-8B1D-4F3A-9E5C-7D0B2A4C6E81",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "14.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "A1B2C3D4-0003-4000-8000-000000000003",
+          "introductoryOffer" : {
+            "internalID" : "A1B2C3D4-0004-4000-8000-000000000004",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1M"
+          },
+          "localizations" : [
+            {
+              "description" : "All of Vinyl Shelf, billed yearly.",
+              "displayName" : "Pro Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.newwavecreative.vinylshelf.pro.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pro Annual",
+          "subscriptionGroupID" : "F0A2C4E6-8B1D-4F3A-9E5C-7D0B2A4C6E81",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

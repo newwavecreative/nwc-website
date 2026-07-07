@@ -10,12 +10,14 @@ final class DiscogsServiceTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeService() -> DiscogsService {
+    private func makeService(consumerKey: String = "", consumerSecret: String = "") -> DiscogsService {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [MockURLProtocol.self]
         return DiscogsService(
             session: URLSession(configuration: configuration),
             token: "test-token",
+            consumerKey: consumerKey,
+            consumerSecret: consumerSecret,
             rateLimiter: RateLimiter(maxRequests: 1_000, per: 60),
             retryBaseDelay: 0.01,
             maxRetries: 4
@@ -108,6 +110,40 @@ final class DiscogsServiceTests: XCTestCase {
             request.value(forHTTPHeaderField: "User-Agent"),
             "VinylShelf/1.0 +https://vinylshelf.com"
         )
+    }
+
+    func testKeySecretAuthPreferredOverToken() async throws {
+        var captured: URLRequest?
+        MockURLProtocol.requestHandler = { [self] request in
+            captured = request
+            return (response(status: 200, for: request), searchJSON)
+        }
+
+        _ = try await makeService(consumerKey: "test-key", consumerSecret: "test-secret")
+            .searchByQuery("rumours")
+
+        let url = try XCTUnwrap(captured?.url?.absoluteString)
+        XCTAssertTrue(url.contains("key=test-key"))
+        XCTAssertTrue(url.contains("secret=test-secret"))
+        XCTAssertFalse(url.contains("token="), "Token must not be sent when key/secret auth is active")
+    }
+
+    func testPlaceholderKeySecretFallsBackToToken() async throws {
+        var captured: URLRequest?
+        MockURLProtocol.requestHandler = { [self] request in
+            captured = request
+            return (response(status: 200, for: request), searchJSON)
+        }
+
+        _ = try await makeService(
+            consumerKey: "YOUR_DISCOGS_CONSUMER_KEY",
+            consumerSecret: "YOUR_DISCOGS_CONSUMER_SECRET"
+        )
+        .searchByQuery("rumours")
+
+        let url = try XCTUnwrap(captured?.url?.absoluteString)
+        XCTAssertTrue(url.contains("token=test-token"), "Placeholder key/secret must fall back to the token")
+        XCTAssertFalse(url.contains("secret="))
     }
 
     func testGetReleaseDetailDecodesDetailShape() async throws {

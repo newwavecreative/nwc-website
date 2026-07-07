@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootTabView: View {
     @State private var isShowingSplash = true
+    @State private var subscriptions = SubscriptionService.shared
 
     var body: some View {
         ZStack {
@@ -26,6 +27,15 @@ struct RootTabView: View {
                 }
             }
 
+            // Hard subscription gate — inert until AppServicesConfig
+            // .enforcePaywall is switched on; disappears the moment an
+            // entitlement (incl. free trial) becomes active.
+            if subscriptions.requiresPaywall, !isShowingSplash {
+                PaywallView()
+                    .transition(.opacity)
+                    .zIndex(1)
+            }
+
             if isShowingSplash {
                 WelcomeSplashView {
                     withAnimation(.easeOut(duration: 0.4)) {
@@ -33,8 +43,11 @@ struct RootTabView: View {
                     }
                 }
                 .transition(.opacity)
-                .zIndex(1)
+                .zIndex(2)
             }
+        }
+        .task {
+            subscriptions.start()
         }
     }
 }
