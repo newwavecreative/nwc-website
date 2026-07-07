@@ -1,0 +1,39 @@
+<!-- @dsCard group="Components" viewport="700x160" name="Navigation" subtitle="TabBar — bottom navigation" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../_ds_bundle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  body { margin:0; padding:22px; font-family: var(--font-body); background: var(--grad-app); color: var(--text-primary); }
+  .phone { width:390px; margin:0 auto; border-radius: var(--radius-lg); overflow:hidden; border:1px solid var(--border-default); }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { TabBar } = window.VinylShelfDesignSystem_aa4cb5;
+    function Demo() {
+      const [tab, setTab] = React.useState('shelf');
+      React.useEffect(() => { if (window.lucide) lucide.createIcons(); });
+      const items = [
+        { id:'shelf',   label:'Shelf',   icon:'library' },
+        { id:'search',  label:'Add',     icon:'search' },
+        { id:'wishlist',label:'Wishlist',icon:'heart' },
+        { id:'profile', label:'You',     icon:'user' },
+      ];
+      return (
+        <div className="phone">
+          <TabBar items={items} active={tab} onChange={setTab} />
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+  </script>
+</body>
+</html>

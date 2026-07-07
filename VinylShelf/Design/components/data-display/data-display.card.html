@@ -1,0 +1,53 @@
+<!-- @dsCard group="Components" viewport="700x320" name="Data display" subtitle="RecordCard, Chip, Badge, StarRating" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../_ds_bundle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<style>
+  body { margin:0; padding:22px; font-family: var(--font-body); background: var(--grad-app); color: var(--text-primary); }
+  .wrap { display:flex; gap:26px; align-items:flex-start; }
+  .col { display:flex; flex-direction:column; gap:12px; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { RecordCard, Chip, Badge, StarRating } = window.VinylShelfDesignSystem_aa4cb5;
+    function Demo() {
+      const [g, setG] = React.useState('Jazz');
+      const [r, setR] = React.useState(4);
+      return (
+        <div className="wrap">
+          <div style={{width:150}}>
+            <RecordCard title="Kind of Blue" artist="Miles Davis" year="1959" format="LP" status="owned" spinning />
+          </div>
+          <div className="col">
+            <div className="row">
+              {['Jazz','Soul','Funk','Ambient'].map(x => (
+                <Chip key={x} selected={g===x} onClick={()=>setG(x)}>{x}</Chip>
+              ))}
+            </div>
+            <div className="row">
+              <Badge tone="owned" dot>Owned</Badge>
+              <Badge tone="wishlist" dot>On the hunt</Badge>
+              <Badge tone="accent">2×LP</Badge>
+              <Badge tone="blue">Reissue</Badge>
+              <Badge tone="neutral">Near Mint</Badge>
+            </div>
+            <div className="row">
+              <StarRating value={r} onChange={setR} size={26} />
+            </div>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+  </script>
+</body>
+</html>

@@ -9,7 +9,9 @@ struct ShelfListRowView: View {
         HStack(alignment: .firstTextBaseline) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(record.title)
-                    .font(.body.weight(.medium))
+                    .font(.vsDisplay(15, extraBold: false))
+                    .kerning(-0.15)
+                    .foregroundStyle(Color.vsTextPrimary)
                     .lineLimit(1)
 
                 HStack(spacing: 6) {
@@ -20,24 +22,23 @@ struct ShelfListRowView: View {
                         Text(genre)
                     }
                 }
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(.vsBody(13))
+                .foregroundStyle(Color.vsTextSecondary)
             }
 
             Spacer()
 
             if let year = record.year {
                 Text(String(year))
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.tertiary)
+                    .font(.vsMono(12))
+                    .foregroundStyle(Color.vsTextMuted)
             }
 
             Image(systemName: "chevron.right")
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(Color.vsTextMuted)
         }
-        .padding(.vertical, 10)
-        .padding(.horizontal)
+        .padding(.vertical, 12)
         .contentShape(Rectangle())
     }
 }
@@ -46,4 +47,6 @@ struct ShelfListRowView: View {
     ShelfListRowView(
         record: VinylRecord(discogsID: 1, title: "Rumours", artist: "Fleetwood Mac", year: 1977, genres: ["Rock"])
     )
+    .padding()
+    .vsScreenBackground()
 }

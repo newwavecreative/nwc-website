@@ -48,16 +48,16 @@ struct BarcodeScannerView: View {
             Spacer()
 
             RoundedRectangle(cornerRadius: 16)
-                .strokeBorder(Color.vinylAccent, lineWidth: 3)
+                .strokeBorder(Color.vsYellow500, lineWidth: 3)
                 .frame(width: 260, height: 160)
-                .background(.clear)
+                .shadow(color: Color.vsYellow500.opacity(0.35), radius: 12)
 
             Text("Line up the barcode inside the frame")
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.white)
+                .font(.vsBody(14, weight: .medium))
+                .foregroundStyle(Color.vsTextPrimary)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(.black.opacity(0.6), in: Capsule())
+                .background(Color.vsInk900.opacity(0.7), in: Capsule())
 
             Spacer()
         }
@@ -66,27 +66,29 @@ struct BarcodeScannerView: View {
     private var permissionDeniedView: some View {
         VStack(spacing: 16) {
             Image(systemName: "camera.fill")
-                .font(.system(size: 44))
-                .foregroundStyle(.secondary)
+                .font(.system(size: 40))
+                .foregroundStyle(Color.vsTextMuted)
 
-            Text("Camera Access Needed")
-                .font(.headline)
+            Text("Camera access needed")
+                .font(.vsDisplay(20))
+                .foregroundStyle(Color.vsTextPrimary)
 
             Text("Vinyl Shelf uses the camera to scan record barcodes. Enable camera access in Settings.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(.vsBody(15))
+                .foregroundStyle(Color.vsTextSecondary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+                .padding(.horizontal, 36)
 
             Button("Open Settings") {
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
                 }
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(VSPrimaryButtonStyle())
+            .frame(maxWidth: 220)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground))
+        .vsScreenBackground()
     }
 
     private var cancelButton: some View {

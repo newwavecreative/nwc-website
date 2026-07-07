@@ -1,0 +1,40 @@
+/* ============================================================
+   VINYL SHELF — TYPOGRAPHY TOKENS
+   Display: Bricolage Grotesque  (playful headings, big numerals)
+   Body:    DM Sans              (UI + reading)
+   Mono:    Space Mono           (catalog #, track times, metadata)
+   ============================================================ */
+:root {
+  /* Families */
+  --font-display: 'Bricolage Grotesque', 'DM Sans', system-ui, sans-serif;
+  --font-body:    'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:    'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Weights */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium:  500; /* @kind font */
+  --fw-semibold:600; /* @kind font */
+  --fw-bold:    700; /* @kind font */
+  --fw-extra:   800; /* @kind font */
+
+  /* Type scale (mobile-first, px). Display sizes lean large & tight. */
+  --text-display-xl: 44px;  /* hero numerals, splash */
+  --text-display-l:  34px;  /* screen titles */
+  --text-display-m:  26px;  /* section headers */
+  --text-title:      20px;  /* card titles, record name */
+  --text-body-l:     17px;  /* primary body */
+  --text-body:       15px;  /* default UI text */
+  --text-body-s:     13px;  /* secondary / meta */
+  --text-caption:    11px;  /* labels, catalog # */
+
+  /* Line heights */
+  --lh-tight:  1.04; /* @kind font */
+  --lh-snug:   1.2; /* @kind font */
+  --lh-normal: 1.5; /* @kind font */
+
+  /* Letter spacing */
+  --ls-tight:   -0.02em; /* @kind font */
+  --ls-normal:  0; /* @kind font */
+  --ls-wide:    0.04em; /* @kind font */
+  --ls-caps:    0.12em; /* @kind font */
+}

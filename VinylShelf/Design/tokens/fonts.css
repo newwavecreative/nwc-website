@@ -1,0 +1,10 @@
+/* Vinyl Shelf webfonts.
+   NOTE: No brand fonts were provided. These are Google Fonts substitutions,
+   loaded via CDN @import. If you have licensed brand fonts, replace these
+   @font-face declarations with self-hosted files and update the families in
+   tokens/typography.css. See readme.md > VISUAL FOUNDATIONS. */
+
+/* Display / headings — Bricolage Grotesque (playful, characterful, variable) */
+/* Body — DM Sans (clean, warm, geometric) */
+/* Mono — Space Mono (catalog numbers, track times, metadata) */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');

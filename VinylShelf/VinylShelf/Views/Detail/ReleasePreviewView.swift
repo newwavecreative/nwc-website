@@ -1,12 +1,12 @@
 import SwiftData
 import SwiftUI
 
-/// Preview of a Discogs release before it's saved — shown after tapping a
-/// search result or scanning a barcode, with "Add to Collection" /
-/// "Add to Wishlist" actions running through the dedup check.
+/// Preview of a Discogs release before it's saved — same hero treatment as
+/// the detail screen, with a frosted action bar: "Add to shelf" / wishlist.
+/// Both actions run through the dedup check.
 struct ReleasePreviewView: View {
     let release: DiscogsRelease
-    /// Called after a successful add (or wishlist→collection move) so the
+    /// Called after a successful add (or wishlist→shelf move) so the
     /// presenting flow can dismiss itself.
     var onAdded: (() -> Void)?
 
@@ -18,13 +18,27 @@ struct ReleasePreviewView: View {
     private let store = RecordStore()
 
     var body: some View {
-        List {
-            header
-            metadataSection
-            tracklistSection
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                DetailHeroView(
+                    frontURL: release.coverImage ?? release.thumb,
+                    backURL: release.backCoverImage,
+                    title: release.displayTitle,
+                    artist: release.displayArtist
+                )
+                .padding(.top, 8)
+
+                badges
+
+                VSMetaGrid(entries: metaEntries)
+
+                TracklistView(tracks: previewTracks)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 24)
         }
-        .listStyle(.insetGrouped)
-        .navigationTitle(release.displayTitle)
+        .vsScreenBackground()
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom) { actionBar }
         .alert(resultMessage ?? "", isPresented: $isShowingResult) {
@@ -36,93 +50,77 @@ struct ReleasePreviewView: View {
         }
     }
 
-    private var header: some View {
-        Section {
-            VStack(spacing: 12) {
-                CoverArtPager(
-                    frontURL: release.coverImage ?? release.thumb,
-                    backURL: release.backCoverImage
-                )
-                .frame(maxWidth: 280)
+    // MARK: - Sections
 
-                VStack(spacing: 4) {
-                    Text(release.displayTitle)
-                        .font(.title2.bold())
-                        .multilineTextAlignment(.center)
-
-                    if !release.displayArtist.isEmpty {
-                        Text(release.displayArtist)
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                    }
-                }
+    private var badges: some View {
+        HStack(spacing: 8) {
+            Spacer()
+            if let format = release.formats?.first?.name {
+                VSBadge(text: format, tone: .accent)
             }
-            .frame(maxWidth: .infinity)
-            .listRowBackground(Color.clear)
-        }
-    }
-
-    private var metadataSection: some View {
-        Section("Release") {
-            if let year = release.year {
-                LabeledContent("Year", value: String(year))
-            }
-            if let label = release.labels?.first?.name {
-                LabeledContent("Label", value: label)
-            }
-            if let catno = release.labels?.first?.catno {
-                LabeledContent("Catalog #", value: catno)
-            }
-            if let format = release.formatSummary {
-                LabeledContent("Format", value: format)
+            if let genre = release.genres?.first {
+                VSBadge(text: genre)
             }
             if let country = release.country {
-                LabeledContent("Country", value: country)
+                VSBadge(text: country)
             }
-            if let genres = release.genres, !genres.isEmpty {
-                LabeledContent("Genres", value: genres.joined(separator: ", "))
-            }
-            if let styles = release.styles, !styles.isEmpty {
-                LabeledContent("Styles", value: styles.joined(separator: ", "))
-            }
+            Spacer()
         }
     }
 
-    @ViewBuilder
-    private var tracklistSection: some View {
-        let tracks = (release.tracklist ?? []).map {
+    private var metaEntries: [(label: String, value: String)] {
+        var entries: [(String, String)] = []
+        if let catno = release.labels?.first?.catno { entries.append(("Catalog no.", catno)) }
+        if let year = release.year { entries.append(("Pressing", String(year))) }
+        if let label = release.labels?.first?.name { entries.append(("Label", label)) }
+        if let format = release.formatSummary { entries.append(("Format", format)) }
+        return entries
+    }
+
+    private var previewTracks: [Track] {
+        (release.tracklist ?? []).map {
             Track(position: $0.position ?? "", title: $0.title ?? "", duration: $0.duration)
         }
-        TracklistView(tracks: tracks)
     }
 
     private var actionBar: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 10) {
             Button {
                 add(toWishlist: false)
             } label: {
-                Label("Add to Collection", systemImage: "plus")
-                    .frame(maxWidth: .infinity)
+                Label("Add to shelf", systemImage: "plus")
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(VSPrimaryButtonStyle())
 
             Button {
                 add(toWishlist: true)
             } label: {
                 Label("Wishlist", systemImage: "heart")
-                    .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(VSSecondaryButtonStyle())
+            .frame(maxWidth: 140)
         }
-        .padding()
-        .background(.bar)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
+        .background {
+            // Frosted ink panel per the design system's sheet treatment.
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .overlay(Color.vsInk800.opacity(0.6))
+                .overlay(alignment: .top) {
+                    Rectangle()
+                        .fill(Color.vsBorderSubtle)
+                        .frame(height: 1)
+                }
+                .ignoresSafeArea()
+        }
     }
 
     private func add(toWishlist: Bool) {
         do {
             let result = try store.add(release, toWishlist: toWishlist, in: modelContext)
             addSucceeded = result != .alreadyExists
-            resultMessage = result.userMessage
+            resultMessage = result.userMessage(addedToWishlist: toWishlist)
         } catch {
             addSucceeded = false
             resultMessage = "Couldn't save the record. Please try again."
@@ -143,7 +141,7 @@ struct ReleasePreviewLoaderView: View {
         Group {
             switch viewModel.state {
             case .loading:
-                LoadingView(message: "Fetching release…")
+                LoadingView(message: "Pulling the sleeve…")
             case .loaded(let release):
                 ReleasePreviewView(release: release, onAdded: onAdded)
             case .failed(let error):

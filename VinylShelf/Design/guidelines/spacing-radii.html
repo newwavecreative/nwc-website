@@ -1,0 +1,24 @@
+<!-- @dsCard group="Spacing" viewport="700x180" name="Radii & elevation" subtitle="Corner radii and dark-UI shadow / glow system" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; padding:22px; font-family: var(--font-body); background: var(--bg-app); color: var(--text-primary); }
+  .row { display:flex; gap:18px; align-items:center; }
+  .box { width:88px; height:88px; background: var(--surface-card); border:1px solid var(--border-default); display:flex; align-items:flex-end; padding:8px; box-sizing:border-box; }
+  .lbl { font-family: var(--font-mono); font-size:10px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="box" style="border-radius:var(--radius-sm)"><span class="lbl">sm 10</span></div>
+    <div class="box" style="border-radius:var(--radius-md)"><span class="lbl">md 14</span></div>
+    <div class="box" style="border-radius:var(--radius-lg)"><span class="lbl">lg 20</span></div>
+    <div class="box" style="border-radius:var(--radius-pill); width:120px"><span class="lbl">pill</span></div>
+    <div class="box" style="border-radius:var(--radius-md); box-shadow:var(--shadow-lg); border:none"><span class="lbl">shadow-lg</span></div>
+    <div class="box" style="border-radius:var(--radius-md); box-shadow:var(--glow-yellow); border-color:var(--yellow-500)"><span class="lbl" style="color:var(--yellow-500)">glow</span></div>
+  </div>
+</body>
+</html>

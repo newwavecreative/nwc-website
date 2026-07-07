@@ -1,8 +1,9 @@
 import SwiftData
 import SwiftUI
 
-/// Detail screen for a saved record — full metadata, tracklist, editable
-/// collection fields, wishlist/collection moves, and deletion.
+/// Detail screen for a saved record per `RecordDetail.jsx`: spinning-disc
+/// hero with swipeable front/back art, status badges, tappable star rating,
+/// mono meta grid, "my copy" card, tracklist, wishlist/shelf move, delete.
 struct RecordDetailView: View {
     @Bindable var record: VinylRecord
 
@@ -13,17 +14,40 @@ struct RecordDetailView: View {
     @State private var isConfirmingDelete = false
 
     var body: some View {
-        List {
-            header
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                DetailHeroView(
+                    frontURL: record.coverImageURL,
+                    backURL: record.backCoverImageURL,
+                    title: record.title,
+                    artist: record.artist
+                )
+                .padding(.top, 8)
 
-            metadataSection
+                badges
 
-            collectionInfoSection
+                HStack {
+                    Spacer()
+                    RatingStarsView(rating: record.rating ?? 0, size: 24) { newValue in
+                        record.rating = newValue
+                        try? modelContext.save()
+                    }
+                    Spacer()
+                }
 
-            TracklistView(tracks: record.tracklist)
+                VSMetaGrid(entries: metaEntries)
+
+                myCopyCard
+
+                TracklistView(tracks: record.tracklist)
+
+                moveButton
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 32)
         }
-        .listStyle(.insetGrouped)
-        .navigationTitle(record.title)
+        .vsScreenBackground()
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -31,17 +55,16 @@ struct RecordDetailView: View {
                     Button {
                         isEditing = true
                     } label: {
-                        Label("Edit Details", systemImage: "pencil")
+                        Label("Edit details", systemImage: "pencil")
                     }
 
                     Button {
-                        record.isInWishlist.toggle()
-                        try? modelContext.save()
+                        toggleWishlist()
                     } label: {
                         if record.isInWishlist {
-                            Label("Move to Collection", systemImage: "square.grid.2x2")
+                            Label("Move to shelf", systemImage: "square.grid.2x2")
                         } else {
-                            Label("Move to Wishlist", systemImage: "heart")
+                            Label("Move to wishlist", systemImage: "heart")
                         }
                     }
 
@@ -54,6 +77,7 @@ struct RecordDetailView: View {
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
+                        .foregroundStyle(Color.vsTextSecondary)
                 }
             }
         }
@@ -65,7 +89,7 @@ struct RecordDetailView: View {
             isPresented: $isConfirmingDelete,
             titleVisibility: .visible
         ) {
-            Button("Delete Record", role: .destructive) {
+            Button("Delete record", role: .destructive) {
                 modelContext.delete(record)
                 try? modelContext.save()
                 dismiss()
@@ -75,108 +99,139 @@ struct RecordDetailView: View {
         }
     }
 
-    private var header: some View {
-        Section {
-            VStack(spacing: 12) {
-                CoverArtPager(frontURL: record.coverImageURL, backURL: record.backCoverImageURL)
-                    .frame(maxWidth: 280)
+    // MARK: - Sections
 
-                VStack(spacing: 4) {
-                    Text(record.title)
-                        .font(.title2.bold())
-                        .multilineTextAlignment(.center)
-
-                    Text(record.artist)
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-
-                    if record.isInWishlist {
-                        Label("On Wishlist", systemImage: "heart.fill")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(Color.vinylAccent)
-                    }
-                }
-
-                if let rating = record.rating {
-                    RatingStarsView(rating: rating)
-                }
+    private var badges: some View {
+        HStack(spacing: 8) {
+            Spacer()
+            if record.isInWishlist {
+                VSBadge(text: "On the hunt", tone: .wishlist, dot: true)
+            } else {
+                VSBadge(text: "Owned", tone: .owned, dot: true)
             }
-            .frame(maxWidth: .infinity)
-            .listRowBackground(Color.clear)
+            if let genre = record.genres.first {
+                VSBadge(text: genre, tone: .accent)
+            }
+            if let condition = record.mediaCondition {
+                VSBadge(text: condition)
+            }
+            Spacer()
         }
     }
 
-    private var metadataSection: some View {
-        Section("Release") {
-            if let year = record.year {
-                LabeledContent("Year", value: String(year))
-            }
-            if let label = record.label {
-                LabeledContent("Label", value: label)
-            }
-            if let catalogNumber = record.catalogNumber {
-                LabeledContent("Catalog #", value: catalogNumber)
-            }
-            if !record.genres.isEmpty {
-                LabeledContent("Genres", value: record.genres.joined(separator: ", "))
-            }
-        }
+    private var metaEntries: [(label: String, value: String)] {
+        var entries: [(String, String)] = []
+        if let catalogNumber = record.catalogNumber { entries.append(("Catalog no.", catalogNumber)) }
+        if let year = record.year { entries.append(("Pressing", String(year))) }
+        if let label = record.label { entries.append(("Label", label)) }
+        if !record.genres.isEmpty { entries.append(("Genre", record.genres.joined(separator: ", "))) }
+        return entries
     }
 
     @ViewBuilder
-    private var collectionInfoSection: some View {
-        Section("My Copy") {
+    private var myCopyCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            VSSectionLabel(text: "My copy")
+
             if let mediaCondition = record.mediaCondition {
-                LabeledContent("Media", value: mediaCondition)
+                copyRow("Media", mediaCondition)
             }
             if let sleeveCondition = record.sleeveCondition {
-                LabeledContent("Sleeve", value: sleeveCondition)
+                copyRow("Sleeve", sleeveCondition)
             }
             if let purchasePrice = record.purchasePrice {
-                LabeledContent(
+                copyRow(
                     "Paid",
-                    value: purchasePrice.formatted(.currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    purchasePrice.formatted(.currency(code: Locale.current.currency?.identifier ?? "USD"))
                 )
             }
             if let notes = record.notes, !notes.isEmpty {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text("Notes")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.vsBody(13))
+                        .foregroundStyle(Color.vsTextSecondary)
                     Text(notes)
+                        .font(.vsBody(15))
+                        .foregroundStyle(Color.vsTextPrimary)
                 }
             }
 
             Button {
                 isEditing = true
             } label: {
-                Label("Edit Details", systemImage: "pencil")
+                Label("Edit details", systemImage: "pencil")
+            }
+            .buttonStyle(VSSecondaryButtonStyle())
+        }
+        .padding(16)
+        .background(Color.vsSurfaceCard, in: RoundedRectangle(cornerRadius: 14))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .strokeBorder(Color.vsBorderSubtle, lineWidth: 1)
+        )
+    }
+
+    private func copyRow(_ label: String, _ value: String) -> some View {
+        HStack {
+            Text(label)
+                .font(.vsBody(13))
+                .foregroundStyle(Color.vsTextSecondary)
+            Spacer()
+            Text(value)
+                .font(.vsBody(15, weight: .medium))
+                .foregroundStyle(Color.vsTextPrimary)
+        }
+    }
+
+    private var moveButton: some View {
+        Button {
+            toggleWishlist()
+        } label: {
+            if record.isInWishlist {
+                Label("Move to shelf", systemImage: "square.grid.2x2")
+            } else {
+                Label("Move to wishlist", systemImage: "heart")
             }
         }
+        .buttonStyle(record.isInWishlist ? AnyButtonStyle(VSPrimaryButtonStyle()) : AnyButtonStyle(VSSecondaryButtonStyle()))
+    }
+
+    private func toggleWishlist() {
+        withAnimation(VSMotion.spring) {
+            record.isInWishlist.toggle()
+        }
+        try? modelContext.save()
     }
 }
 
-/// Read-only star row (1–5).
-struct RatingStarsView: View {
-    let rating: Int
+/// Type-erased ButtonStyle so a button can swap styles by state.
+struct AnyButtonStyle: ButtonStyle {
+    private let _makeBody: (Configuration) -> AnyView
 
-    var body: some View {
-        HStack(spacing: 2) {
-            ForEach(1...5, id: \.self) { star in
-                Image(systemName: star <= rating ? "star.fill" : "star")
-                    .foregroundStyle(Color.vinylAccent)
-                    .font(.caption)
-            }
-        }
-        .accessibilityLabel("\(rating) out of 5 stars")
+    init<S: ButtonStyle>(_ style: S) {
+        _makeBody = { AnyView(style.makeBody(configuration: $0)) }
+    }
+
+    func makeBody(configuration: Configuration) -> some View {
+        _makeBody(configuration)
     }
 }
 
 #Preview {
     NavigationStack {
         RecordDetailView(
-            record: VinylRecord(discogsID: 1, title: "Rumours", artist: "Fleetwood Mac", year: 1977, rating: 5)
+            record: VinylRecord(
+                discogsID: 1,
+                title: "Rumours",
+                artist: "Fleetwood Mac",
+                year: 1977,
+                label: "Warner Bros. Records",
+                catalogNumber: "BSK 3010",
+                genres: ["Rock"],
+                rating: 5
+            )
         )
     }
     .modelContainer(for: VinylRecord.self, inMemory: true)
+    .preferredColorScheme(.dark)
 }

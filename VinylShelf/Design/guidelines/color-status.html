@@ -1,0 +1,25 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Text & status" subtitle="Cream text ramp + semantic status colors" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; font-family: var(--font-body); background: var(--bg-app); }
+  .row { display:flex; gap:10px; padding:20px; }
+  .sw { flex:1; border-radius: var(--radius-md); border:1px solid var(--border-subtle); height:96px; display:flex; flex-direction:column; justify-content:flex-end; padding:10px; }
+  .name { font-family: var(--font-mono); font-size:11px; letter-spacing:.04em; }
+  .hex { font-family: var(--font-mono); font-size:11px; opacity:.7; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw" style="background:var(--cream-100); color:#0E1428"><div class="name">cream-100 · text</div><div class="hex">#F4F1E6</div></div>
+    <div class="sw" style="background:var(--cream-300); color:#0E1428"><div class="name">cream-300 · 2nd</div><div class="hex">#C7C6BC</div></div>
+    <div class="sw" style="background:var(--cream-500); color:#0E1428"><div class="name">cream-500 · muted</div><div class="hex">#8E9099</div></div>
+    <div class="sw" style="background:var(--green-500); color:#0E1428"><div class="name">owned</div><div class="hex">#37C98A</div></div>
+    <div class="sw" style="background:var(--coral-500); color:#0E1428"><div class="name">wishlist</div><div class="hex">#FF6B5E</div></div>
+    <div class="sw" style="background:var(--red-500); color:#fff"><div class="name">danger</div><div class="hex">#F0524B</div></div>
+  </div>
+</body>
+</html>

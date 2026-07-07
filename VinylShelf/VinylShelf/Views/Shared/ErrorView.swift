@@ -5,23 +5,29 @@ struct ErrorView: View {
     var retry: (() -> Void)?
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             Image(systemName: "exclamationmark.triangle")
-                .font(.system(size: 44))
-                .foregroundStyle(.secondary)
+                .font(.system(size: 40))
+                .foregroundStyle(Color.vsStatusWishlist)
+
+            Text("Needle skipped")
+                .font(.vsDisplay(20))
+                .foregroundStyle(Color.vsTextPrimary)
 
             Text(error.localizedDescription)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(.vsBody(15))
+                .foregroundStyle(Color.vsTextSecondary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+                .padding(.horizontal, 36)
 
             if let retry {
-                Button("Try Again", action: retry)
-                    .buttonStyle(.borderedProminent)
+                Button("Try again", action: retry)
+                    .buttonStyle(VSPrimaryButtonStyle())
+                    .frame(maxWidth: 220)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .vsScreenBackground()
     }
 }
 

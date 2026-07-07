@@ -1,0 +1,11 @@
+Bundled fonts (design-system substitutions, per Design/readme.md):
+
+- Bricolage Grotesque — (c) The Bricolage Grotesque Project Authors
+  https://github.com/ateliertriay/bricolage
+- DM Sans — (c) Colophon Foundry / Google
+  https://github.com/googlefonts/dm-fonts
+- Space Mono — (c) Colophon Foundry / Google
+  https://github.com/googlefonts/spacemono
+
+All three are licensed under the SIL Open Font License 1.1:
+https://openfontlicense.org

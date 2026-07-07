@@ -13,11 +13,12 @@ struct RecordStore {
         /// The release is already saved; nothing was inserted.
         case alreadyExists
 
-        var userMessage: String {
+        /// User-facing confirmation in the brand voice.
+        func userMessage(addedToWishlist: Bool) -> String {
             switch self {
-            case .inserted: return "Added to your shelf."
-            case .movedToCollection: return "Moved from your wishlist to your collection."
-            case .alreadyExists: return "Already in your collection."
+            case .inserted: return addedToWishlist ? "On the hunt." : "Filed on the shelf."
+            case .movedToCollection: return "Moved from your wishlist to your shelf."
+            case .alreadyExists: return "Already on your shelf."
             }
         }
     }

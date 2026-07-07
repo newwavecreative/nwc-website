@@ -1,0 +1,24 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Electric blue" subtitle="Interactive accent — links, focus, secondary actions" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; font-family: var(--font-body); background: var(--bg-app); color: var(--cream-50); }
+  .row { display:flex; gap:10px; padding:20px; }
+  .sw { flex:1; border-radius: var(--radius-md); height:96px; display:flex; flex-direction:column; justify-content:flex-end; padding:10px; }
+  .name { font-family: var(--font-mono); font-size:11px; letter-spacing:.04em; }
+  .hex { font-family: var(--font-mono); font-size:11px; opacity:.75; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw" style="background:var(--blue-700)"><div class="name">blue-700</div><div class="hex">#244BB8</div></div>
+    <div class="sw" style="background:var(--blue-500); box-shadow: var(--glow-blue)"><div class="name">blue-500</div><div class="hex">#3B6FE5</div></div>
+    <div class="sw" style="background:var(--blue-400)"><div class="name">blue-400</div><div class="hex">#5E8CFF</div></div>
+    <div class="sw" style="background:var(--blue-300); color:#0E1428"><div class="name">blue-300</div><div class="hex">#90B2FF</div></div>
+    <div class="sw" style="background:var(--blue-200); color:#0E1428"><div class="name">blue-200</div><div class="hex">#C2D4FF</div></div>
+  </div>
+</body>
+</html>

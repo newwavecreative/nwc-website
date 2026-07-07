@@ -1,0 +1,128 @@
+<!-- @dsCard group="Vinyl Shelf App" viewport="430x760" name="Mobile app" subtitle="Interactive: shelf, add, wishlist, profile, record detail" -->
+<!-- @startingPoint section="Vinyl Shelf App" subtitle="Full mobile app — shelf, search, wishlist, profile" viewport="430x820" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vinyl Shelf — App</title>
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../_ds_bundle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: var(--font-body);
+    background: #05060d;
+    color: var(--text-primary);
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 24px; box-sizing: border-box;
+  }
+  .device {
+    width: 390px; height: 780px;
+    background: var(--grad-app);
+    border-radius: 40px;
+    border: 10px solid #0b0e1a;
+    box-shadow: 0 40px 90px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.05);
+    overflow: hidden; position: relative;
+    display: flex; flex-direction: column;
+  }
+  .statusbar {
+    height: 44px; flex: 0 0 44px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; font-family: var(--font-mono); font-size: 13px;
+    color: var(--text-primary);
+  }
+  .statusbar .dots { display: flex; gap: 5px; align-items: center; }
+  .screen { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .screen::-webkit-scrollbar { width: 0; }
+  .toast-wrap { position: absolute; left: 0; right: 0; bottom: 86px; display: flex; justify-content: center; pointer-events: none; z-index: 80; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="data.js"></script>
+  <script type="text/babel" src="ShelfScreen.jsx"></script>
+  <script type="text/babel" src="SearchScreen.jsx"></script>
+  <script type="text/babel" src="WishlistScreen.jsx"></script>
+  <script type="text/babel" src="ProfileScreen.jsx"></script>
+  <script type="text/babel" src="RecordDetail.jsx"></script>
+  <script type="text/babel">
+    const { TabBar, Toast } = window.VinylShelfDesignSystem_aa4cb5;
+    const D = window.VS_DATA;
+
+    function App() {
+      const [tab, setTab] = React.useState('shelf');
+      const [filter, setFilter] = React.useState('All');
+      const [owned, setOwned] = React.useState(D.owned);
+      const [wishlist, setWishlist] = React.useState(D.wishlist);
+      const [detail, setDetail] = React.useState(null);
+      const [isPublic, setPublic] = React.useState(true);
+      const [toast, setToast] = React.useState(null);
+      const [addedIds, setAddedIds] = React.useState([]);
+
+      React.useEffect(() => { if (window.lucide) lucide.createIcons(); });
+
+      const flash = (t) => { setToast(t); clearTimeout(window.__vt); window.__vt = setTimeout(() => setToast(null), 2200); };
+
+      const addToShelf = (r) => {
+        if (addedIds.includes(r.id)) return;
+        setOwned(o => [{ ...r, status: 'owned', rating: 0, cond: 'Near Mint' }, ...o]);
+        setAddedIds(ids => [...ids, r.id]);
+        flash({ message: 'Filed on the shelf', tone: 'owned', icon: 'check' });
+      };
+      const removeWish = (r) => {
+        setWishlist(w => w.filter(x => x.id !== r.id));
+        flash({ message: 'Removed from wishlist', tone: 'wishlist', icon: 'x' });
+      };
+      const wished = detail && wishlist.some(x => x.title === detail.title);
+      const toggleWish = () => {
+        if (!detail) return;
+        if (wished) { setWishlist(w => w.filter(x => x.title !== detail.title)); flash({ message: 'Removed from wishlist', tone: 'wishlist', icon: 'x' }); }
+        else { setWishlist(w => [{ ...detail, status: 'wishlist' }, ...w]); flash({ message: 'On the hunt', tone: 'wishlist', icon: 'heart' }); }
+      };
+      const share = () => flash({ message: 'Shelf link copied', tone: 'blue', icon: 'link' });
+
+      const tabs = [
+        { id: 'shelf', label: 'Shelf', icon: 'library' },
+        { id: 'search', label: 'Add', icon: 'search' },
+        { id: 'wishlist', label: 'Wishlist', icon: 'heart' },
+        { id: 'profile', label: 'You', icon: 'user' },
+      ];
+
+      return (
+        <div className="device">
+          <div className="statusbar">
+            <span>9:41</span>
+            <span className="dots">
+              <i data-lucide="signal" style={{width:15,height:15}}></i>
+              <i data-lucide="wifi" style={{width:15,height:15}}></i>
+              <i data-lucide="battery-full" style={{width:18,height:18}}></i>
+            </span>
+          </div>
+
+          <div className="screen">
+            {tab === 'shelf' && <ShelfScreen records={owned} filter={filter} setFilter={setFilter} onOpen={setDetail} />}
+            {tab === 'search' && <SearchScreen results={D.search} onAdd={addToShelf} addedIds={addedIds} />}
+            {tab === 'wishlist' && <WishlistScreen records={wishlist} onRemove={removeWish} />}
+            {tab === 'profile' && <ProfileScreen ownedCount={owned.length} wishCount={wishlist.length} onShare={share} isPublic={isPublic} setPublic={setPublic} />}
+          </div>
+
+          <TabBar items={tabs} active={tab} onChange={setTab} />
+
+          {detail && <RecordDetail record={detail} onClose={() => setDetail(null)} onToggleWish={toggleWish} wished={wished} />}
+
+          <div className="toast-wrap">
+            {toast && <div style={{ pointerEvents: 'auto' }}><Toast message={toast.message} tone={toast.tone} icon={<i data-lucide={toast.icon} style={{width:18,height:18}}></i>} /></div>}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<svg width="360" height="96" viewBox="0 0 360 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vinyl Shelf">
+  
+  <g transform="translate(0,4)">
+    <circle cx="44" cy="44" r="43" fill="#070A16" stroke="#1C2748" stroke-width="1.5"></circle>
+    <circle cx="44" cy="44" r="36" stroke="#141C36" stroke-width="1.5"></circle>
+    <circle cx="44" cy="44" r="30" stroke="#1C2748" stroke-width="1.5"></circle>
+    <circle cx="44" cy="44" r="24" stroke="#141C36" stroke-width="1.5"></circle>
+    <path d="M44 3 A41 41 0 0 1 85 44" stroke="#3B6FE5" stroke-width="2.5" stroke-linecap="round" opacity="0.7"></path>
+    <circle cx="44" cy="44" r="16" fill="#FFC93C" stroke="#E9A712" stroke-width="1.2"></circle>
+    <circle cx="44" cy="44" r="3" fill="#070A16"></circle>
+  </g>
+  
+  <text x="104" y="42" font-family="&#39;Bricolage Grotesque&#39;,&#39;DM Sans&#39;,sans-serif" font-size="30" font-weight="800" letter-spacing="-0.5" fill="#F4F1E6">Vinyl</text>
+  <text x="104" y="76" font-family="&#39;Bricolage Grotesque&#39;,&#39;DM Sans&#39;,sans-serif" font-size="30" font-weight="800" letter-spacing="-0.5" fill="#FFC93C">Shelf</text>
+</svg>

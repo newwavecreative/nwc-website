@@ -36,7 +36,7 @@ struct ScannerFlowView: View {
             .toolbar(.hidden, for: .navigationBar)
 
         case .searching:
-            LoadingView(message: "Looking up barcode…")
+            LoadingView(message: "Looking up that barcode…")
                 .toolbar { cancelToolbar }
 
         case .single(let release):
@@ -46,35 +46,53 @@ struct ScannerFlowView: View {
             .toolbar { cancelToolbar }
 
         case .multiple(let releases):
-            List(releases) { release in
-                NavigationLink(value: release) {
-                    SearchResultRowView(release: release)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 10) {
+                    VSSectionLabel(text: "We found \(releases.count) pressings")
+                        .padding(.top, 8)
+
+                    ForEach(releases) { release in
+                        NavigationLink(value: release) {
+                            SearchResultRowView(release: release)
+                        }
+                        .buttonStyle(VSPressButtonStyle())
+                    }
                 }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 24)
             }
-            .listStyle(.plain)
-            .navigationTitle("Pick a Release")
+            .vsScreenBackground()
+            .navigationTitle("Pick a pressing")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { cancelToolbar }
 
         case .noMatch(let barcode):
-            VStack(spacing: 16) {
+            VStack(spacing: 12) {
+                Spacer()
+
                 EmptyStateView(
                     systemImage: "barcode.viewfinder",
-                    title: "No Match Found",
+                    title: "No match found",
                     message: "Discogs has no release for barcode \(barcode)."
                 )
-                .frame(maxHeight: 300)
+                .frame(maxHeight: 260)
 
-                Button("Search Manually") {
+                Button("Search manually") {
                     isShowingManualSearch = true
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(VSPrimaryButtonStyle())
+                .frame(maxWidth: 240)
 
-                Button("Scan Again") {
+                Button("Scan again") {
                     viewModel.rescan()
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(VSSecondaryButtonStyle())
+                .frame(maxWidth: 240)
+
+                Spacer()
             }
+            .frame(maxWidth: .infinity)
+            .vsScreenBackground()
             .toolbar { cancelToolbar }
 
         case .failed(let error):
@@ -89,6 +107,8 @@ struct ScannerFlowView: View {
     private var cancelToolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
             Button("Cancel") { dismiss() }
+                .font(.vsBody(15, weight: .medium))
+                .foregroundStyle(Color.vsBlue300)
         }
     }
 }
@@ -96,4 +116,5 @@ struct ScannerFlowView: View {
 #Preview {
     ScannerFlowView()
         .modelContainer(for: VinylRecord.self, inMemory: true)
+        .preferredColorScheme(.dark)
 }

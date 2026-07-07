@@ -1,0 +1,25 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Ink surfaces" subtitle="Blue-black ramp for app backgrounds & surfaces" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; font-family: var(--font-body); background: var(--bg-app); color: var(--text-primary); }
+  .row { display:flex; gap:10px; padding:20px; }
+  .sw { flex:1; border-radius: var(--radius-md); border:1px solid var(--border-subtle); height:96px; display:flex; flex-direction:column; justify-content:flex-end; padding:10px; }
+  .name { font-family: var(--font-mono); font-size:11px; letter-spacing:.04em; }
+  .hex { font-family: var(--font-mono); font-size:11px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw" style="background:var(--ink-900)"><div class="name">ink-900</div><div class="hex">#070A16</div></div>
+    <div class="sw" style="background:var(--ink-800)"><div class="name">ink-800</div><div class="hex">#0E1428</div></div>
+    <div class="sw" style="background:var(--ink-700)"><div class="name">ink-700</div><div class="hex">#141C36</div></div>
+    <div class="sw" style="background:var(--ink-600)"><div class="name">ink-600</div><div class="hex">#1C2748</div></div>
+    <div class="sw" style="background:var(--ink-500)"><div class="name">ink-500</div><div class="hex">#26345E</div></div>
+    <div class="sw" style="background:var(--ink-400)"><div class="name">ink-400</div><div class="hex">#33447A</div></div>
+  </div>
+</body>
+</html>

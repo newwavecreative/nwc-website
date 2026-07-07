@@ -1,57 +1,125 @@
 import SwiftUI
 
-/// Manual search against Discogs, debounced ~400ms. Lives in its own tab and
-/// is also presented modally from the Collection's "+" button (`isModal`).
+/// "Add a record" — debounced Discogs search per `SearchScreen.jsx`.
+/// Lives in its own tab and is also presented modally from the shelf's "+"
+/// button (`isModal` adds a Cancel affordance).
 struct SearchView: View {
-    /// True when presented from the Collection "+" flow, adding a Cancel button.
     var isModal = false
 
     @State private var viewModel = SearchViewModel()
     @Environment(\.dismiss) private var dismiss
+    @FocusState private var isSearchFocused: Bool
 
     var body: some View {
-        content
-            .navigationTitle("Search")
-            .searchable(text: $viewModel.query, prompt: "Artist or album")
-            .navigationDestination(for: DiscogsRelease.self) { release in
-                ReleasePreviewLoaderView(releaseID: release.id) {
-                    if isModal { dismiss() }
-                }
+        VStack(alignment: .leading, spacing: 0) {
+            header
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+
+            searchField
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+
+            results
+        }
+        .vsScreenBackground()
+        .toolbar(.hidden, for: .navigationBar)
+        .navigationDestination(for: DiscogsRelease.self) { release in
+            ReleasePreviewLoaderView(releaseID: release.id) {
+                if isModal { dismiss() }
             }
-            .toolbar {
-                if isModal {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { dismiss() }
-                    }
-                }
+        }
+    }
+
+    private var header: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text("Add a record")
+                .font(.vsDisplay(28))
+                .kerning(-0.55)
+                .foregroundStyle(Color.vsTextPrimary)
+
+            Spacer()
+
+            if isModal {
+                Button("Cancel") { dismiss() }
+                    .font(.vsBody(15, weight: .medium))
+                    .foregroundStyle(Color.vsBlue300)
             }
+        }
+    }
+
+    private var searchField: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(Color.vsTextMuted)
+
+            TextField(
+                "",
+                text: $viewModel.query,
+                prompt: Text("Search artists, albums, catalog #…")
+                    .foregroundStyle(Color.vsTextMuted)
+            )
+            .font(.vsBody(15))
+            .foregroundStyle(Color.vsTextPrimary)
+            .focused($isSearchFocused)
+            .submitLabel(.search)
+            .onSubmit { viewModel.retry() }
+            .autocorrectionDisabled()
+
+            if !viewModel.query.isEmpty {
+                Button {
+                    viewModel.query = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(Color.vsTextMuted)
+                }
+                .accessibilityLabel("Clear search")
+            }
+        }
+        .padding(.horizontal, 14)
+        .frame(height: 48)
+        .background(Color.vsSurfaceRaised, in: RoundedRectangle(cornerRadius: 14))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .strokeBorder(
+                    isSearchFocused ? Color.vsBlue400 : Color.vsBorderSubtle,
+                    lineWidth: 1
+                )
+        )
+        .animation(.easeOut(duration: 0.15), value: isSearchFocused)
     }
 
     @ViewBuilder
-    private var content: some View {
+    private var results: some View {
         switch viewModel.state {
         case .idle:
             EmptyStateView(
                 systemImage: "magnifyingglass",
                 title: "Search For Vinyl",
-                message: "Find releases by artist or album title."
+                message: "Find releases by artist, album title, or catalog number."
             )
         case .loading:
-            LoadingView(message: "Searching Discogs…")
-        case .loaded(let results):
-            if results.isEmpty {
+            LoadingView(message: "Digging through the crates…")
+        case .loaded(let releases):
+            if releases.isEmpty {
                 EmptyStateView(
                     systemImage: "questionmark.circle",
-                    title: "No Results",
-                    message: "Nothing on Discogs matched \"\(viewModel.query)\"."
+                    title: "No matches",
+                    message: "Nothing matched \"\(viewModel.query)\". Try artist and album together."
                 )
             } else {
-                List(results) { release in
-                    NavigationLink(value: release) {
-                        SearchResultRowView(release: release)
+                ScrollView {
+                    LazyVStack(spacing: 10) {
+                        ForEach(releases) { release in
+                            NavigationLink(value: release) {
+                                SearchResultRowView(release: release)
+                            }
+                            .buttonStyle(VSPressButtonStyle())
+                        }
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 16)
                 }
-                .listStyle(.plain)
             }
         case .failed(let error):
             ErrorView(error: error) {
@@ -66,4 +134,5 @@ struct SearchView: View {
         SearchView()
     }
     .modelContainer(for: VinylRecord.self, inMemory: true)
+    .preferredColorScheme(.dark)
 }

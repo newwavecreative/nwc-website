@@ -1,8 +1,9 @@
 import SwiftData
 import SwiftUI
 
-/// "My Shelf" — the user's collection, searchable and filterable by genre,
-/// with grid and compact list presentations.
+/// "My Shelf" — the collection home per `Design/ui_kits/.../ShelfScreen.jsx`:
+/// mono eyebrow + big record count, genre filter chips, record grid (or the
+/// compact list for large collections). Searchable; floating yellow FAB adds.
 struct CollectionView: View {
     enum ViewMode: String {
         case grid
@@ -38,16 +39,18 @@ struct CollectionView: View {
                 content
                 addButton
             }
-            .navigationTitle("Shelf")
+            .vsScreenBackground()
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar { viewModeToggle }
             .searchable(text: $searchText, prompt: "Search your shelf")
             .navigationDestination(for: VinylRecord.self) { record in
                 RecordDetailView(record: record)
             }
         }
-        .confirmationDialog("Add a Record", isPresented: $viewModel.isShowingAddDialog) {
-            Button("Scan Barcode") { viewModel.addRoute = .scanner }
-            Button("Search Manually") { viewModel.addRoute = .search }
+        .confirmationDialog("Add a record", isPresented: $viewModel.isShowingAddDialog) {
+            Button("Scan barcode") { viewModel.addRoute = .scanner }
+            Button("Search manually") { viewModel.addRoute = .search }
         }
         .fullScreenCover(item: $viewModel.addRoute) { route in
             switch route {
@@ -68,57 +71,82 @@ struct CollectionView: View {
         if records.isEmpty {
             EmptyStateView(
                 systemImage: "opticaldisc",
-                title: "Your Shelf Is Empty",
-                message: "Scan a barcode or search Discogs to add your first record."
+                title: "Your shelf is empty",
+                message: "Let's find your first record — scan a barcode or search.",
+                useBrandMark: true
             )
         } else {
-            VStack(spacing: 0) {
-                if genres.count > 1 {
-                    genreFilterBar
-                }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    header
+                        .padding(.horizontal, 20)
+                        .padding(.top, 4)
 
-                if filteredRecords.isEmpty {
-                    ContentUnavailableView.search
-                } else {
-                    switch viewMode {
-                    case .grid: recordGrid
-                    case .list: recordList
+                    if genres.count > 1 {
+                        genreFilterBar
+                            .padding(.vertical, 12)
+                    } else {
+                        Spacer()
+                            .frame(height: 16)
+                    }
+
+                    if filteredRecords.isEmpty {
+                        EmptyStateView(
+                            systemImage: "magnifyingglass",
+                            title: "No matches",
+                            message: "Nothing on your shelf matches that filter."
+                        )
+                        .padding(.top, 48)
+                    } else {
+                        switch viewMode {
+                        case .grid: recordGrid
+                        case .list: recordList
+                        }
                     }
                 }
+                .padding(.bottom, 96)
             }
+        }
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            VSSectionLabel(text: "Your shelf")
+            Text("^[\(records.count) record](inflect: true)")
+                .font(.vsDisplay(32))
+                .kerning(-0.6)
+                .foregroundStyle(Color.vsTextPrimary)
         }
     }
 
     private var recordGrid: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(filteredRecords) { record in
-                    NavigationLink(value: record) {
-                        RecordGridItemView(record: record)
-                    }
-                    .buttonStyle(.plain)
-                    .contextMenu { menuItems(for: record) }
+        LazyVGrid(columns: columns, spacing: 20) {
+            ForEach(filteredRecords) { record in
+                NavigationLink(value: record) {
+                    RecordGridItemView(record: record)
                 }
+                .buttonStyle(VSPressButtonStyle())
+                .contextMenu { menuItems(for: record) }
             }
-            .padding()
         }
+        .padding(.horizontal, 20)
+        .padding(.top, 4)
     }
 
     private var recordList: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(filteredRecords) { record in
-                    NavigationLink(value: record) {
-                        ShelfListRowView(record: record)
-                    }
-                    .buttonStyle(.plain)
-                    .contextMenu { menuItems(for: record) }
-
-                    Divider()
-                        .padding(.leading)
+        LazyVStack(spacing: 0) {
+            ForEach(filteredRecords) { record in
+                NavigationLink(value: record) {
+                    ShelfListRowView(record: record)
                 }
+                .buttonStyle(.plain)
+                .contextMenu { menuItems(for: record) }
+
+                Divider()
+                    .overlay(Color.vsBorderSubtle)
             }
         }
+        .padding(.horizontal, 20)
     }
 
     @ViewBuilder
@@ -126,7 +154,7 @@ struct CollectionView: View {
         Button {
             viewModel.moveToWishlist(record, in: modelContext)
         } label: {
-            Label("Move to Wishlist", systemImage: "heart")
+            Label("Move to wishlist", systemImage: "heart")
         }
         Button(role: .destructive) {
             viewModel.delete(record, in: modelContext)
@@ -135,7 +163,7 @@ struct CollectionView: View {
         }
     }
 
-    // MARK: - Genre filter
+    // MARK: - Genre filter (Chip.jsx)
 
     private var genreFilterBar: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -149,34 +177,40 @@ struct CollectionView: View {
                     }
                 }
             }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 20)
         }
     }
 
     private func genreChip(_ title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(title)
-                .font(.subheadline.weight(isSelected ? .semibold : .regular))
+                .font(.vsBody(13, weight: .medium))
+                .foregroundStyle(isSelected ? Color.vsYellow500 : Color.vsTextSecondary)
                 .padding(.horizontal, 14)
-                .padding(.vertical, 7)
-                .background(
-                    isSelected ? AnyShapeStyle(Color.vinylAccent) : AnyShapeStyle(.quaternary),
-                    in: Capsule()
+                .frame(height: 34)
+                .background(isSelected ? Color.vsAccentSoft : .clear, in: Capsule())
+                .overlay(
+                    Capsule()
+                        .strokeBorder(
+                            isSelected ? Color.vsYellow600 : Color.vsBorderDefault,
+                            lineWidth: 1
+                        )
                 )
-                .foregroundStyle(isSelected ? .black : .primary)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(VSPressButtonStyle())
     }
 
-    // MARK: - Toolbar & floating button
+    // MARK: - Toolbar & FAB
 
     private var viewModeToggle: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {
-                viewMode = (viewMode == .grid) ? .list : .grid
+                withAnimation(VSMotion.spring) {
+                    viewMode = (viewMode == .grid) ? .list : .grid
+                }
             } label: {
                 Image(systemName: viewMode == .grid ? "list.bullet" : "square.grid.2x2")
+                    .foregroundStyle(Color.vsTextSecondary)
             }
             .accessibilityLabel(viewMode == .grid ? "Switch to list view" : "Switch to grid view")
         }
@@ -187,12 +221,13 @@ struct CollectionView: View {
             viewModel.isShowingAddDialog = true
         } label: {
             Image(systemName: "plus")
-                .font(.title2.weight(.semibold))
-                .foregroundStyle(.white)
+                .font(.title2.weight(.bold))
+                .foregroundStyle(Color.vsTextOnYellow)
                 .frame(width: 56, height: 56)
-                .background(Color.vinylAccent, in: Circle())
-                .shadow(radius: 4, y: 2)
+                .background(LinearGradient.vsYellow, in: Circle())
+                .shadow(color: Color.vsYellow500.opacity(0.35), radius: 12, y: 4)
         }
+        .buttonStyle(VSPressButtonStyle())
         .padding(24)
         .accessibilityLabel("Add a record")
     }
@@ -201,4 +236,5 @@ struct CollectionView: View {
 #Preview {
     CollectionView()
         .modelContainer(for: VinylRecord.self, inMemory: true)
+        .preferredColorScheme(.dark)
 }

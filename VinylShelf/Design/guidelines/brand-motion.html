@@ -1,0 +1,30 @@
+<!-- @dsCard group="Brand" viewport="700x200" name="Signature spin & motion" subtitle="The record rotates while active — the brand's core animation" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; font-family: var(--font-body); background: var(--grad-app); color: var(--text-primary); display:flex; align-items:center; gap:34px; padding:26px 34px; }
+  .disc { width:120px; height:120px; animation: spin var(--dur-spin) linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .disc { animation: none; } }
+  .txt h3 { font-family: var(--font-display); font-size:22px; font-weight:800; margin:0 0 6px; }
+  .txt p { margin:0; color: var(--text-secondary); font-size:14px; max-width:340px; line-height:1.5; }
+  .chips { display:flex; gap:8px; margin-top:12px; }
+  .chip { font-family: var(--font-mono); font-size:10px; letter-spacing:.04em; padding:5px 10px; border-radius: var(--radius-pill); background: var(--surface-raised); color: var(--text-secondary); }
+</style>
+</head>
+<body>
+  <img class="disc" src="../assets/logo-mark.svg" alt="spinning record">
+  <div class="txt">
+    <h3>Springy &amp; alive</h3>
+    <p>The active record spins continuously (~1.6s / turn). Enters and presses use a springy overshoot easing that settles with a little bounce.</p>
+    <div class="chips">
+      <span class="chip">ease-spring</span>
+      <span class="chip">dur-spin 1600ms</span>
+      <span class="chip">press → 0.96</span>
+    </div>
+  </div>
+</body>
+</html>

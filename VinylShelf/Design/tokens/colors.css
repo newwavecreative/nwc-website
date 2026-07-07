@@ -1,0 +1,76 @@
+/* ============================================================
+   VINYL SHELF — COLOR TOKENS
+   Palette: deep blue-black, electric blue, warm yellow, cream.
+   Base ramps first, then semantic aliases.
+   ============================================================ */
+:root {
+  /* --- Ink (blue-black) ramp: app backgrounds & surfaces --- */
+  --ink-900: #070A16;   /* deepest — app background */
+  --ink-850: #0A0F1F;
+  --ink-800: #0E1428;   /* base surface */
+  --ink-700: #141C36;   /* card */
+  --ink-600: #1C2748;   /* raised card / input */
+  --ink-500: #26345E;   /* hover surface */
+  --ink-400: #33447A;   /* borders on dark */
+
+  /* --- Blue ramp: interactive accent, links, focus --- */
+  --blue-700: #244BB8;
+  --blue-600: #2F5CDC;
+  --blue-500: #3B6FE5;  /* primary blue */
+  --blue-400: #5E8CFF;
+  --blue-300: #90B2FF;
+  --blue-200: #C2D4FF;
+
+  /* --- Yellow ramp: signature highlight, "now spinning", CTAs --- */
+  --yellow-700: #C98A0A;
+  --yellow-600: #E9A712;
+  --yellow-500: #FFC93C;  /* primary yellow */
+  --yellow-400: #FFD65E;
+  --yellow-300: #FFE596;
+
+  /* --- Cream ramp: text on dark --- */
+  --cream-50:  #FBFAF4;
+  --cream-100: #F4F1E6;  /* primary text */
+  --cream-300: #C7C6BC;  /* secondary text */
+  --cream-500: #8E9099;  /* muted / captions */
+
+  /* --- Semantic status --- */
+  --green-500: #37C98A;  /* owned / in collection */
+  --coral-500: #FF6B5E;  /* wishlist / remove */
+  --red-500:   #F0524B;  /* destructive */
+
+  /* ---------- SEMANTIC ALIASES ---------- */
+  --bg-app:          var(--ink-900);
+  --bg-elevated:     var(--ink-850);
+  --surface:         var(--ink-800);
+  --surface-card:    var(--ink-700);
+  --surface-raised:  var(--ink-600);
+  --surface-hover:   var(--ink-500);
+  --surface-input:   var(--ink-600);
+
+  --border-subtle:   rgba(255, 255, 255, 0.07);
+  --border-default:  rgba(255, 255, 255, 0.12);
+  --border-strong:   var(--ink-400);
+  --border-focus:    var(--blue-400);
+
+  --text-primary:    var(--cream-100);
+  --text-secondary:  var(--cream-300);
+  --text-muted:      var(--cream-500);
+  --text-on-yellow:  var(--ink-900);
+  --text-on-blue:    var(--cream-50);
+  --text-link:       var(--blue-300);
+
+  --accent:          var(--yellow-500);
+  --accent-strong:   var(--yellow-600);
+  --accent-soft:     rgba(255, 201, 60, 0.14);
+  --accent-blue:     var(--blue-500);
+  --accent-blue-soft:rgba(59, 111, 229, 0.16);
+
+  --status-owned:    var(--green-500);
+  --status-wishlist: var(--coral-500);
+  --status-danger:   var(--red-500);
+
+  /* Focus ring */
+  --ring: 0 0 0 3px rgba(94, 140, 255, 0.45);
+  --ring-yellow: 0 0 0 3px rgba(255, 201, 60, 0.45);
+}

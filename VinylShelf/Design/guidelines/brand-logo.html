@@ -1,0 +1,29 @@
+<!-- @dsCard group="Brand" viewport="700x220" name="Logo & wordmark" subtitle="The record mark + two-line lockup" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; font-family: var(--font-display); background: var(--grad-app); color: var(--text-primary); display:flex; align-items:center; gap:40px; padding:28px 34px; }
+  .lockup { display:flex; align-items:center; gap:18px; }
+  .word { line-height:.98; }
+  .word .a { font-size:38px; font-weight:800; letter-spacing:-.02em; }
+  .word .b { font-size:38px; font-weight:800; letter-spacing:-.02em; color: var(--yellow-500); }
+  img { width:96px; height:96px; }
+  .stack { display:flex; align-items:center; gap:18px; }
+  .cap { font-family:var(--font-mono); font-size:11px; color:var(--text-muted); letter-spacing:.04em; }
+</style>
+</head>
+<body>
+  <div class="lockup">
+    <img src="../assets/logo-mark.svg" alt="Vinyl Shelf mark">
+    <div class="word"><div class="a">Vinyl</div><div class="b">Shelf</div></div>
+  </div>
+  <div style="width:1px; height:120px; background:var(--border-default)"></div>
+  <div class="stack">
+    <img src="../assets/logo-mark.svg" alt="mark" style="width:56px;height:56px">
+    <div class="cap">Mark alone —<br>app icon, splash,<br>empty states</div>
+  </div>
+</body>
+</html>

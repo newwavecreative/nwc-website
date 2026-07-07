@@ -1,0 +1,49 @@
+<!-- @dsCard group="Components" viewport="700x260" name="Forms" subtitle="Button, IconButton, Input, Switch" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../_ds_bundle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  body { margin:0; padding:22px; font-family: var(--font-body); background: var(--grad-app); color: var(--text-primary); }
+  .grid { display:flex; flex-direction:column; gap:18px; }
+  .row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { Button, IconButton, Input, Switch } = window.VinylShelfDesignSystem_aa4cb5;
+    const Ico = ({n}) => <i data-lucide={n} style={{width:18,height:18}}></i>;
+    function Demo() {
+      const [on, setOn] = React.useState(true);
+      React.useEffect(() => { if (window.lucide) lucide.createIcons(); });
+      return (
+        <div className="grid">
+          <div className="row">
+            <Button variant="primary" iconLeft={<Ico n="plus"/>}>Add to shelf</Button>
+            <Button variant="secondary" iconLeft={<Ico n="heart"/>}>Wishlist</Button>
+            <Button variant="ghost">Cancel</Button>
+            <Button variant="danger">Remove</Button>
+            <Button variant="primary" disabled>Disabled</Button>
+          </div>
+          <div className="row">
+            <IconButton label="search" variant="soft"><Ico n="search"/></IconButton>
+            <IconButton label="share" variant="ghost"><Ico n="share-2"/></IconButton>
+            <IconButton label="fav" active><Ico n="heart"/></IconButton>
+            <IconButton label="play" variant="solid"><Ico n="play"/></IconButton>
+            <div style={{width:220}}><Input placeholder="Search artists, albums…" iconLeft={<Ico n="search"/>} /></div>
+            <Switch checked={on} onChange={setOn} label="Public shelf" />
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+  </script>
+</body>
+</html>
