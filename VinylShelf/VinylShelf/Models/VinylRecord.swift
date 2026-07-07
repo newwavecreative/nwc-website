@@ -17,6 +17,7 @@ final class VinylRecord {
     var catalogNumber: String?
     var genres: [String] = []
     var coverImageURL: String?
+    var backCoverImageURL: String?
     var tracklistData: Data?
     var mediaCondition: String?
     var sleeveCondition: String?
@@ -35,6 +36,7 @@ final class VinylRecord {
         catalogNumber: String? = nil,
         genres: [String] = [],
         coverImageURL: String? = nil,
+        backCoverImageURL: String? = nil,
         tracklistData: Data? = nil,
         mediaCondition: String? = nil,
         sleeveCondition: String? = nil,
@@ -52,6 +54,7 @@ final class VinylRecord {
         self.catalogNumber = catalogNumber
         self.genres = genres
         self.coverImageURL = coverImageURL
+        self.backCoverImageURL = backCoverImageURL
         self.tracklistData = tracklistData
         self.mediaCondition = mediaCondition
         self.sleeveCondition = sleeveCondition
@@ -95,6 +98,7 @@ extension VinylRecord {
             catalogNumber: release.labels?.first?.catno,
             genres: release.genres ?? [],
             coverImageURL: release.coverImage ?? release.thumb,
+            backCoverImageURL: release.backCoverImage,
             tracklistData: tracks.isEmpty ? nil : try? JSONEncoder().encode(tracks),
             isInWishlist: isInWishlist
         )

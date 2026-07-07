@@ -58,7 +58,10 @@ final class DiscogsServiceTests: XCTestCase {
         "styles": ["Pop Rock"],
         "labels": [{"name": "Warner Bros. Records", "catno": "BSK 3010"}],
         "formats": [{"name": "Vinyl", "descriptions": ["LP", "Album"]}],
-        "images": [{"uri": "https://img.discogs.com/rumours-full.jpg"}],
+        "images": [
+            {"type": "primary", "uri": "https://img.discogs.com/rumours-full.jpg"},
+            {"type": "secondary", "uri": "https://img.discogs.com/rumours-back.jpg"}
+        ],
         "thumb": "https://img.discogs.com/rumours-thumb.jpg",
         "identifiers": [{"type": "Barcode", "value": "0 7599-27313-1 8"}],
         "tracklist": [
@@ -118,7 +121,8 @@ final class DiscogsServiceTests: XCTestCase {
         XCTAssertEqual(release.artistsSort, "Fleetwood Mac")
         XCTAssertEqual(release.year, 1977)
         XCTAssertEqual(release.tracklist?.count, 2)
-        XCTAssertEqual(release.coverImage, "https://img.discogs.com/rumours-full.jpg", "Detail cover should fall back to images[0].uri")
+        XCTAssertEqual(release.coverImage, "https://img.discogs.com/rumours-full.jpg", "Detail cover should fall back to the primary image")
+        XCTAssertEqual(release.backCoverImage, "https://img.discogs.com/rumours-back.jpg", "First secondary image should be treated as the back cover")
         XCTAssertEqual(release.barcodes, ["0 7599-27313-1 8"], "Detail barcodes should come from identifiers")
         XCTAssertEqual(release.labels?.first?.catno, "BSK 3010")
     }

@@ -1,23 +1,37 @@
 import SwiftUI
 
 struct RootTabView: View {
+    @State private var isShowingSplash = true
+
     var body: some View {
-        TabView {
-            CollectionView()
-                .tabItem {
-                    Label("Collection", systemImage: "square.grid.2x2.fill")
-                }
+        ZStack {
+            TabView {
+                CollectionView()
+                    .tabItem {
+                        Label("My Shelf", systemImage: "square.grid.2x2.fill")
+                    }
 
-            WishlistView()
-                .tabItem {
-                    Label("Wishlist", systemImage: "heart.fill")
-                }
+                WishlistView()
+                    .tabItem {
+                        Label("Wishlist", systemImage: "heart.fill")
+                    }
 
-            NavigationStack {
-                SearchView()
+                NavigationStack {
+                    SearchView()
+                }
+                .tabItem {
+                    Label("Search", systemImage: "magnifyingglass")
+                }
             }
-            .tabItem {
-                Label("Search", systemImage: "magnifyingglass")
+
+            if isShowingSplash {
+                WelcomeSplashView {
+                    withAnimation(.easeOut(duration: 0.4)) {
+                        isShowingSplash = false
+                    }
+                }
+                .transition(.opacity)
+                .zIndex(1)
             }
         }
     }

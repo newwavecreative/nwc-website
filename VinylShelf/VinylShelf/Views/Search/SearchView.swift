@@ -33,7 +33,7 @@ struct SearchView: View {
         case .idle:
             EmptyStateView(
                 systemImage: "magnifyingglass",
-                title: "Search Discogs",
+                title: "Search For Vinyl",
                 message: "Find releases by artist or album title."
             )
         case .loading:

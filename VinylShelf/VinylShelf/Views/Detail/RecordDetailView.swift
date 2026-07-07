@@ -78,7 +78,7 @@ struct RecordDetailView: View {
     private var header: some View {
         Section {
             VStack(spacing: 12) {
-                AsyncCoverImage(urlString: record.coverImageURL, cornerRadius: 12)
+                CoverArtPager(frontURL: record.coverImageURL, backURL: record.backCoverImageURL)
                     .frame(maxWidth: 280)
 
                 VStack(spacing: 4) {

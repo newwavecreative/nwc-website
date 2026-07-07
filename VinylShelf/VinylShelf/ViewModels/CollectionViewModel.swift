@@ -17,6 +17,23 @@ final class CollectionViewModel {
 
     private let store = RecordStore()
 
+    /// In-memory shelf filtering: genre chip + free-text search over title
+    /// and artist. Fast enough for collections in the hundreds.
+    func filter(_ records: [VinylRecord], searchText: String, genre: String?) -> [VinylRecord] {
+        var result = records
+        if let genre {
+            result = result.filter { $0.genres.contains(genre) }
+        }
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !query.isEmpty {
+            result = result.filter {
+                $0.title.localizedCaseInsensitiveContains(query)
+                    || $0.artist.localizedCaseInsensitiveContains(query)
+            }
+        }
+        return result
+    }
+
     func delete(_ record: VinylRecord, in context: ModelContext) {
         context.delete(record)
         try? context.save()

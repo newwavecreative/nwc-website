@@ -22,6 +22,9 @@ struct DiscogsRelease: Codable, Identifiable, Hashable {
     let styles: [String]?
     let country: String?
     let coverImage: String?
+    /// First "secondary" image on the detail endpoint — by Discogs convention
+    /// usually the back cover. Always nil for search results (no `images`).
+    let backCoverImage: String?
     let thumb: String?
     let tracklist: [DiscogsTrack]?
     let barcodes: [String]?
@@ -47,6 +50,7 @@ struct DiscogsRelease: Codable, Identifiable, Hashable {
         styles: [String]? = nil,
         country: String? = nil,
         coverImage: String? = nil,
+        backCoverImage: String? = nil,
         thumb: String? = nil,
         tracklist: [DiscogsTrack]? = nil,
         barcodes: [String]? = nil
@@ -61,6 +65,7 @@ struct DiscogsRelease: Codable, Identifiable, Hashable {
         self.styles = styles
         self.country = country
         self.coverImage = coverImage
+        self.backCoverImage = backCoverImage
         self.thumb = thumb
         self.tracklist = tracklist
         self.barcodes = barcodes
@@ -96,13 +101,16 @@ struct DiscogsRelease: Codable, Identifiable, Hashable {
         thumb = try container.decodeIfPresent(String.self, forKey: .thumb)
         tracklist = try container.decodeIfPresent([DiscogsTrack].self, forKey: .tracklist)
 
+        let images = (try? container.decode([DiscogsImage].self, forKey: .images)) ?? []
         if let cover = try container.decodeIfPresent(String.self, forKey: .coverImage) {
             coverImage = cover
-        } else if let images = try? container.decode([DiscogsImage].self, forKey: .images) {
-            coverImage = images.first?.uri
         } else {
-            coverImage = nil
+            let primary = images.first { $0.type?.lowercased() == "primary" } ?? images.first
+            coverImage = primary?.uri
         }
+        backCoverImage = images.first {
+            $0.type?.lowercased() == "secondary" && $0.uri != nil && $0.uri != coverImage
+        }?.uri
 
         if let searchBarcodes = try? container.decode([String].self, forKey: .barcode) {
             barcodes = searchBarcodes
@@ -192,6 +200,7 @@ struct DiscogsArtist: Codable, Hashable {
 }
 
 struct DiscogsImage: Codable, Hashable {
+    let type: String?
     let uri: String?
 }
 

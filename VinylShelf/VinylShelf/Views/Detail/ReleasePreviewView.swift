@@ -39,8 +39,11 @@ struct ReleasePreviewView: View {
     private var header: some View {
         Section {
             VStack(spacing: 12) {
-                AsyncCoverImage(urlString: release.coverImage ?? release.thumb, cornerRadius: 12)
-                    .frame(maxWidth: 280)
+                CoverArtPager(
+                    frontURL: release.coverImage ?? release.thumb,
+                    backURL: release.backCoverImage
+                )
+                .frame(maxWidth: 280)
 
                 VStack(spacing: 4) {
                     Text(release.displayTitle)
