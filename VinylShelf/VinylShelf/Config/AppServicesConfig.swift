@@ -8,7 +8,7 @@ enum AppServicesConfig {
     /// App ID from https://dashboard.telemetrydeck.com — a write-only
     /// identifier, not a secret. Analytics are disabled while this is a
     /// placeholder.
-    static let telemetryAppID = "97A0E8FA-857B-4E93-A309-81C6D6A4DD40"
+    static let telemetryAppID = "598B1673-909A-4DB9-9304-5B4F7E149EEA"
 
     static var isTelemetryConfigured: Bool {
         !telemetryAppID.isEmpty && !telemetryAppID.hasPrefix("YOUR_")
