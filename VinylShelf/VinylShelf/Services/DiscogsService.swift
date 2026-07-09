@@ -63,20 +63,32 @@ final class DiscogsService {
     func searchByBarcode(_ barcode: String) async throws -> [DiscogsRelease] {
         let response: DiscogsSearchResponse = try await request(
             path: "/database/search",
-            queryItems: [URLQueryItem(name: "barcode", value: barcode)]
+            queryItems: [
+                URLQueryItem(name: "barcode", value: barcode),
+                URLQueryItem(name: "format", value: "Vinyl"),
+                URLQueryItem(name: "per_page", value: "100"),
+            ]
         )
-        return response.results
+        return response.results.filter(\.isVinyl)
     }
 
-    func searchByQuery(_ query: String) async throws -> [DiscogsRelease] {
+    /// One page of vinyl-only search results (Discogs caps pages at 100
+    /// items). `pagination` tells the caller whether more pages exist.
+    func searchByQuery(_ query: String, page: Int = 1) async throws -> DiscogsSearchResponse {
         let response: DiscogsSearchResponse = try await request(
             path: "/database/search",
             queryItems: [
                 URLQueryItem(name: "q", value: query),
                 URLQueryItem(name: "type", value: "release"),
+                URLQueryItem(name: "format", value: "Vinyl"),
+                URLQueryItem(name: "per_page", value: "100"),
+                URLQueryItem(name: "page", value: String(page)),
             ]
         )
-        return response.results
+        return DiscogsSearchResponse(
+            results: response.results.filter(\.isVinyl),
+            pagination: response.pagination
+        )
     }
 
     func getReleaseDetail(_ id: Int) async throws -> DiscogsRelease {

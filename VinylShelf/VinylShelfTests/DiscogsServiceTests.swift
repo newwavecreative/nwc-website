@@ -30,6 +30,7 @@ final class DiscogsServiceTests: XCTestCase {
 
     private let searchJSON = Data("""
     {
+        "pagination": {"page": 1, "pages": 1, "per_page": 100, "items": 1},
         "results": [
             {
                 "id": 249504,
@@ -41,9 +42,20 @@ final class DiscogsServiceTests: XCTestCase {
                 "genres": ["Rock"],
                 "styles": ["Pop Rock"],
                 "barcode": ["0 7599-27313-1 8"],
-                "formats": [{"name": "Vinyl", "descriptions": ["LP", "Album"]}],
+                "format": ["Vinyl", "LP", "Album"],
                 "labels": [{"name": "Warner Bros. Records", "catno": "BSK 3010"}]
             }
+        ]
+    }
+    """.utf8)
+
+    private let mixedFormatsJSON = Data("""
+    {
+        "pagination": {"page": 1, "pages": 1, "per_page": 100, "items": 3},
+        "results": [
+            {"id": 1, "title": "Artist - CD Reissue", "format": ["CD", "Album"]},
+            {"id": 2, "title": "Artist - Original Press", "format": ["Vinyl", "LP"]},
+            {"id": 3, "title": "Artist - DVD Concert", "format": ["DVD"]}
         ]
     }
     """.utf8)
@@ -80,16 +92,43 @@ final class DiscogsServiceTests: XCTestCase {
             (response(status: 200, for: request), searchJSON)
         }
 
-        let results = try await makeService().searchByQuery("rumours")
+        let page = try await makeService().searchByQuery("rumours")
 
-        XCTAssertEqual(results.count, 1)
-        let release = try XCTUnwrap(results.first)
+        XCTAssertEqual(page.results.count, 1)
+        XCTAssertEqual(page.pagination?.pages, 1)
+        let release = try XCTUnwrap(page.results.first)
         XCTAssertEqual(release.id, 249504)
         XCTAssertEqual(release.year, 1977, "String year on search results should parse to Int")
         XCTAssertEqual(release.displayArtist, "Fleetwood Mac")
         XCTAssertEqual(release.displayTitle, "Rumours")
         XCTAssertEqual(release.coverImage, "https://img.discogs.com/rumours.jpg")
         XCTAssertEqual(release.barcodes, ["0 7599-27313-1 8"])
+        XCTAssertEqual(release.formats?.first?.name, "Vinyl", "Search 'format' string array should decode")
+    }
+
+    func testSearchFiltersToVinylOnly() async throws {
+        MockURLProtocol.requestHandler = { [self] request in
+            (response(status: 200, for: request), mixedFormatsJSON)
+        }
+
+        let page = try await makeService().searchByQuery("artist")
+
+        XCTAssertEqual(page.results.map(\.id), [2], "CD and DVD results must be filtered out")
+    }
+
+    func testSearchRequestsVinylFormatAndFullPage() async throws {
+        var captured: URLRequest?
+        MockURLProtocol.requestHandler = { [self] request in
+            captured = request
+            return (response(status: 200, for: request), searchJSON)
+        }
+
+        _ = try await makeService().searchByQuery("rumours", page: 3)
+
+        let url = try XCTUnwrap(captured?.url?.absoluteString)
+        XCTAssertTrue(url.contains("format=Vinyl"))
+        XCTAssertTrue(url.contains("per_page=100"))
+        XCTAssertTrue(url.contains("page=3"))
     }
 
     func testSearchByBarcodeBuildsCorrectRequest() async throws {
@@ -105,6 +144,7 @@ final class DiscogsServiceTests: XCTestCase {
         let url = try XCTUnwrap(request.url?.absoluteString)
         XCTAssertTrue(url.contains("/database/search"))
         XCTAssertTrue(url.contains("barcode=075992731318"))
+        XCTAssertTrue(url.contains("format=Vinyl"))
         XCTAssertTrue(url.contains("token=test-token"))
         XCTAssertEqual(
             request.value(forHTTPHeaderField: "User-Agent"),
@@ -175,10 +215,10 @@ final class DiscogsServiceTests: XCTestCase {
             return (response(status: 200, for: request), searchJSON)
         }
 
-        let results = try await makeService().searchByQuery("rumours")
+        let page = try await makeService().searchByQuery("rumours")
 
         XCTAssertEqual(requestCount, 3, "Two 429s should be retried before the 200")
-        XCTAssertEqual(results.count, 1)
+        XCTAssertEqual(page.results.count, 1)
     }
 
     func testRateLimitedRequestExhaustsRetries() async {

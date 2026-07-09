@@ -124,6 +124,16 @@ struct SearchView: View {
                                 SearchResultRowView(release: release)
                             }
                             .buttonStyle(VSPressButtonStyle())
+                            .onAppear {
+                                viewModel.loadMoreIfNeeded(after: release)
+                            }
+                        }
+
+                        if viewModel.isLoadingMore {
+                            ProgressView()
+                                .tint(Color.vsYellow500)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 12)
                         }
                     }
                     .padding(.horizontal, 20)

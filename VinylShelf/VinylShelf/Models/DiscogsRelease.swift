@@ -37,6 +37,8 @@ struct DiscogsRelease: Codable, Identifiable, Hashable {
         case images
         case barcode
         case identifiers
+        // Search results carry formats as a plain string array under "format"
+        case format
     }
 
     init(
@@ -94,7 +96,15 @@ struct DiscogsRelease: Codable, Identifiable, Hashable {
         }
 
         labels = try container.decodeIfPresent([DiscogsLabel].self, forKey: .labels)
-        formats = try container.decodeIfPresent([DiscogsFormat].self, forKey: .formats)
+        if let detailFormats = try container.decodeIfPresent([DiscogsFormat].self, forKey: .formats) {
+            formats = detailFormats
+        } else if let names = try? container.decode([String].self, forKey: .format), !names.isEmpty {
+            // Search shape: "format": ["Vinyl", "LP", "Album"] — first entry is
+            // the format name, the rest are descriptions (mirrors the detail shape).
+            formats = [DiscogsFormat(name: names[0], descriptions: Array(names.dropFirst()))]
+        } else {
+            formats = nil
+        }
         genres = try container.decodeIfPresent([String].self, forKey: .genres)
         styles = try container.decodeIfPresent([String].self, forKey: .styles)
         country = try container.decodeIfPresent(String.self, forKey: .country)
@@ -167,6 +177,14 @@ extension DiscogsRelease {
         return splitTitle?.title ?? title
     }
 
+    /// Vinyl Shelf only catalogs vinyl. The API filters server-side via
+    /// `format=Vinyl`; this is the client-side belt-and-braces check.
+    /// Releases with no format information are kept (benefit of the doubt).
+    var isVinyl: Bool {
+        guard let formats, !formats.isEmpty else { return true }
+        return formats.contains { ($0.name ?? "").localizedCaseInsensitiveContains("vinyl") }
+    }
+
     var formatSummary: String? {
         guard let formats, !formats.isEmpty else { return nil }
         return formats
@@ -213,4 +231,10 @@ struct DiscogsIdentifier: Codable, Hashable {
 
 struct DiscogsSearchResponse: Codable {
     let results: [DiscogsRelease]
+    let pagination: DiscogsPagination?
+}
+
+struct DiscogsPagination: Codable {
+    let page: Int
+    let pages: Int
 }
