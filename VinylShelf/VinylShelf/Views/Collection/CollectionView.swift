@@ -43,7 +43,6 @@ struct CollectionView: View {
             .vsScreenBackground()
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar { brandMark }
             .toolbar { viewModeToggle }
             .searchable(text: $searchText, prompt: "Search your shelf")
             .navigationDestination(for: VinylRecord.self) { record in
@@ -80,9 +79,13 @@ struct CollectionView: View {
         } else {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    header
+                    logoRow
                         .padding(.horizontal, 20)
                         .padding(.top, 4)
+
+                    header
+                        .padding(.horizontal, 20)
+                        .padding(.top, 18)
 
                     if genres.count > 1 {
                         genreFilterBar
@@ -231,13 +234,19 @@ struct CollectionView: View {
 
     // MARK: - Toolbar & FAB
 
-    /// Small brand mark in the top-left corner — lives only on this screen.
-    private var brandMark: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
+    /// Full logo lockup — mark + wordmark. Scrolls away with the content
+    /// (only the view toggle stays sticky in the nav bar).
+    private var logoRow: some View {
+        HStack(spacing: 10) {
             BrandMarkView()
-                .frame(width: 30, height: 30)
-                .accessibilityHidden(true)
+                .frame(width: 34, height: 34)
+
+            Text("Vinyl Shelf")
+                .font(.vsDisplay(20))
+                .kerning(-0.4)
+                .foregroundStyle(Color.vsTextPrimary)
         }
+        .accessibilityHidden(true)
     }
 
     private var viewModeToggle: some ToolbarContent {
