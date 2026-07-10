@@ -258,7 +258,11 @@ struct CollectionView: View {
                     .font(.vsDisplay(17))
                     .kerning(-0.3)
                     .foregroundStyle(Color.vsTextPrimary)
+                    .lineLimit(1)
             }
+            // Keep the toolbar from compressing the lockup and dropping
+            // the wordmark.
+            .fixedSize(horizontal: true, vertical: false)
             .opacity(isScrolled ? 0 : 1)
             .accessibilityHidden(true)
         }
