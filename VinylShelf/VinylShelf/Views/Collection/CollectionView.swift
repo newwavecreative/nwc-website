@@ -107,7 +107,7 @@ struct CollectionView: View {
 
                     searchField
                         .padding(.horizontal, 20)
-                        .padding(.top, 14)
+                        .padding(.top, 22)
 
                     header
                         .padding(.horizontal, 20)
