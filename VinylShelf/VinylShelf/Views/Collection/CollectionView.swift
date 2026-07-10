@@ -22,6 +22,7 @@ struct CollectionView: View {
     @State private var searchText = ""
     @State private var selectedGenre: String?
     @AppStorage("shelfViewMode") private var viewMode: ViewMode = .grid
+    @AppStorage("shelfSortOrder") private var sortOrder: ShelfSort = .mostRecent
 
     private let columns = [GridItem(.adaptive(minimum: 150), spacing: 16)]
 
@@ -30,7 +31,7 @@ struct CollectionView: View {
     }
 
     private var filteredRecords: [VinylRecord] {
-        viewModel.filter(records, searchText: searchText, genre: selectedGenre)
+        viewModel.filter(records, searchText: searchText, genre: selectedGenre, sort: sortOrder)
     }
 
     var body: some View {
@@ -110,13 +111,40 @@ struct CollectionView: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            VSSectionLabel(text: "Your shelf")
-            Text("^[\(records.count) record](inflect: true)")
-                .font(.vsDisplay(32))
-                .kerning(-0.6)
-                .foregroundStyle(Color.vsTextPrimary)
+        HStack(alignment: .bottom) {
+            VStack(alignment: .leading, spacing: 2) {
+                VSSectionLabel(text: "Your shelf")
+                Text("^[\(records.count) record](inflect: true)")
+                    .font(.vsDisplay(32))
+                    .kerning(-0.6)
+                    .foregroundStyle(Color.vsTextPrimary)
+            }
+
+            Spacer()
+
+            sortMenu
         }
+    }
+
+    private var sortMenu: some View {
+        Menu {
+            Picker("Sort by", selection: $sortOrder) {
+                ForEach(ShelfSort.allCases) { sort in
+                    Text(sort.displayName).tag(sort)
+                }
+            }
+        } label: {
+            Image(systemName: "arrow.up.arrow.down")
+                .font(.system(size: 17, weight: .medium))
+                .foregroundStyle(Color.vsTextSecondary)
+                .frame(width: 44, height: 44)
+                .background(Color.vsSurfaceRaised, in: Circle())
+                .overlay(
+                    Circle()
+                        .strokeBorder(Color.vsBorderDefault, lineWidth: 1)
+                )
+        }
+        .accessibilityLabel("Sort by: \(sortOrder.displayName)")
     }
 
     private var recordGrid: some View {

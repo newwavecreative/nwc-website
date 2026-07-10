@@ -2,6 +2,23 @@ import Foundation
 import Observation
 import SwiftData
 
+/// Shelf ordering options. Raw values are persisted via AppStorage.
+enum ShelfSort: String, CaseIterable, Identifiable {
+    case mostRecent
+    case titleAZ
+    case titleZA
+
+    var id: Self { self }
+
+    var displayName: String {
+        switch self {
+        case .mostRecent: return "Most Recent"
+        case .titleAZ: return "Alphabetical A–Z"
+        case .titleZA: return "Alphabetical Z–A"
+        }
+    }
+}
+
 @MainActor
 @Observable
 final class CollectionViewModel {
@@ -17,9 +34,16 @@ final class CollectionViewModel {
 
     private let store = RecordStore()
 
-    /// In-memory shelf filtering: genre chip + free-text search over title
-    /// and artist. Fast enough for collections in the hundreds.
-    func filter(_ records: [VinylRecord], searchText: String, genre: String?) -> [VinylRecord] {
+    /// In-memory shelf filtering and ordering: genre chip + free-text search
+    /// over title and artist, then the chosen sort. Fast enough for
+    /// collections in the hundreds. Incoming records arrive newest-first
+    /// from the @Query, so `.mostRecent` keeps that order.
+    func filter(
+        _ records: [VinylRecord],
+        searchText: String,
+        genre: String?,
+        sort: ShelfSort = .mostRecent
+    ) -> [VinylRecord] {
         var result = records
         if let genre {
             result = result.filter { $0.genres.contains(genre) }
@@ -31,7 +55,14 @@ final class CollectionViewModel {
                     || $0.artist.localizedCaseInsensitiveContains(query)
             }
         }
-        return result
+        switch sort {
+        case .mostRecent:
+            return result
+        case .titleAZ:
+            return result.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+        case .titleZA:
+            return result.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedDescending }
+        }
     }
 
     func delete(_ record: VinylRecord, in context: ModelContext) {
