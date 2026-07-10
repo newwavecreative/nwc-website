@@ -43,6 +43,7 @@ struct CollectionView: View {
             .vsScreenBackground()
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar { brandMark }
             .toolbar { viewModeToggle }
             .searchable(text: $searchText, prompt: "Search your shelf")
             .navigationDestination(for: VinylRecord.self) { record in
@@ -229,6 +230,15 @@ struct CollectionView: View {
     }
 
     // MARK: - Toolbar & FAB
+
+    /// Small brand mark in the top-left corner — lives only on this screen.
+    private var brandMark: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            BrandMarkView()
+                .frame(width: 30, height: 30)
+                .accessibilityHidden(true)
+        }
+    }
 
     private var viewModeToggle: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {

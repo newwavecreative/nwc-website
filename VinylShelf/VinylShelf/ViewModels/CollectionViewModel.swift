@@ -5,6 +5,8 @@ import SwiftData
 /// Shelf ordering options. Raw values are persisted via AppStorage.
 enum ShelfSort: String, CaseIterable, Identifiable {
     case mostRecent
+    case artistAZ
+    case artistZA
     case titleAZ
     case titleZA
 
@@ -13,8 +15,10 @@ enum ShelfSort: String, CaseIterable, Identifiable {
     var displayName: String {
         switch self {
         case .mostRecent: return "Most Recent"
-        case .titleAZ: return "Alphabetical A–Z"
-        case .titleZA: return "Alphabetical Z–A"
+        case .artistAZ: return "Artist A–Z"
+        case .artistZA: return "Artist Z–A"
+        case .titleAZ: return "Title A–Z"
+        case .titleZA: return "Title Z–A"
         }
     }
 }
@@ -58,11 +62,34 @@ final class CollectionViewModel {
         switch sort {
         case .mostRecent:
             return result
+        case .artistAZ:
+            return result.sorted { artistOrdering($0, $1) == .orderedAscending }
+        case .artistZA:
+            return result.sorted { artistOrdering($0, $1) == .orderedDescending }
         case .titleAZ:
             return result.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
         case .titleZA:
             return result.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedDescending }
         }
+    }
+
+    /// Record-store filing: compare by artist ignoring a leading "The"
+    /// (The Beatles under B), tie-breaking by title so an artist's albums
+    /// stay alphabetized within their block.
+    private func artistOrdering(_ lhs: VinylRecord, _ rhs: VinylRecord) -> ComparisonResult {
+        let left = Self.filingName(lhs.artist)
+        let right = Self.filingName(rhs.artist)
+        let byArtist = left.localizedCaseInsensitiveCompare(right)
+        guard byArtist == .orderedSame else { return byArtist }
+        return lhs.title.localizedCaseInsensitiveCompare(rhs.title)
+    }
+
+    private static func filingName(_ artist: String) -> String {
+        let trimmed = artist.trimmingCharacters(in: .whitespaces)
+        if trimmed.lowercased().hasPrefix("the "), trimmed.count > 4 {
+            return String(trimmed.dropFirst(4))
+        }
+        return trimmed
     }
 
     func delete(_ record: VinylRecord, in context: ModelContext) {
