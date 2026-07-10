@@ -10,6 +10,15 @@ struct SearchView: View {
     @State private var isShowingScanner = false
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isSearchFocused: Bool
+    @Namespace private var searchFieldNamespace
+
+    /// Resting layout: field mid-screen (thumb-reachable) between the title
+    /// and helper copy. Focusing the field or having an active search slides
+    /// it to the top where results need it.
+    private var isHero: Bool {
+        guard case .idle = viewModel.state else { return false }
+        return viewModel.query.isEmpty && !isSearchFocused
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -17,12 +26,18 @@ struct SearchView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 12)
 
-            searchField
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
+            if isHero {
+                heroSearch
+            } else {
+                searchField
+                    .matchedGeometryEffect(id: "searchField", in: searchFieldNamespace)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
 
-            results
+                activeContent
+            }
         }
+        .animation(VSMotion.spring, value: isHero)
         .vsScreenBackground()
         .toolbar(.hidden, for: .navigationBar)
         .toolbar {
@@ -115,11 +130,65 @@ struct SearchView: View {
         .animation(.easeOut(duration: 0.15), value: isSearchFocused)
     }
 
+    /// Resting empty state: title → search field → helper copy, centered in
+    /// comfortable thumb reach.
+    private var heroSearch: some View {
+        VStack(spacing: 0) {
+            Spacer()
+
+            VStack(spacing: 18) {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 36))
+                    .foregroundStyle(Color.vsTextMuted)
+
+                Text("Search For Vinyl")
+                    .font(.vsDisplay(20))
+                    .foregroundStyle(Color.vsTextPrimary)
+
+                searchField
+                    .matchedGeometryEffect(id: "searchField", in: searchFieldNamespace)
+
+                Text("Find releases by artist, album title, or catalog number.")
+                    .font(.vsBody(15))
+                    .foregroundStyle(Color.vsTextSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 24)
+            }
+            .padding(.horizontal, 20)
+
+            Spacer()
+
+            // Required attribution per the Discogs API terms.
+            Text("Data provided by Discogs")
+                .font(.vsMono(11))
+                .kerning(0.4)
+                .foregroundStyle(Color.vsTextMuted)
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 20)
+        }
+    }
+
+    /// Content below the top-pinned field once the search is live.
     @ViewBuilder
-    private var results: some View {
+    private var activeContent: some View {
         switch viewModel.state {
         case .idle:
-            idleState
+            // Field focused, nothing typed yet.
+            VStack(spacing: 0) {
+                Text("Find releases by artist, album title, or catalog number.")
+                    .font(.vsBody(14))
+                    .foregroundStyle(Color.vsTextMuted)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 40)
+                    .padding(.top, 28)
+
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                isSearchFocused = false
+            }
         case .loading:
             LoadingView(message: "Digging through the crates…")
         case .loaded(let releases):
@@ -132,28 +201,6 @@ struct SearchView: View {
             ErrorView(error: error) {
                 viewModel.retry()
             }
-        }
-    }
-
-    private var idleState: some View {
-        VStack(spacing: 0) {
-            EmptyStateView(
-                systemImage: "magnifyingglass",
-                title: "Search For Vinyl",
-                message: "Find releases by artist, album title, or catalog number."
-            )
-
-            // Required attribution per the Discogs API terms.
-            Text("Data provided by Discogs")
-                .font(.vsMono(11))
-                .kerning(0.4)
-                .foregroundStyle(Color.vsTextMuted)
-                .padding(.bottom, 20)
-        }
-        .contentShape(Rectangle())
-        .onTapGesture {
-            // Tap outside the field to drop the keyboard.
-            isSearchFocused = false
         }
     }
 
