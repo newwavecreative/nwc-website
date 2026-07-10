@@ -21,6 +21,7 @@ struct CollectionView: View {
     @State private var viewModel = CollectionViewModel()
     @State private var searchText = ""
     @State private var selectedGenre: String?
+    @State private var isScrolled = false
     @AppStorage("shelfViewMode") private var viewMode: ViewMode = .grid
     @AppStorage("shelfSortOrder") private var sortOrder: ShelfSort = .mostRecent
 
@@ -43,6 +44,7 @@ struct CollectionView: View {
             .vsScreenBackground()
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar { logoToolbarItem }
             .toolbar { viewModeToggle }
             .searchable(text: $searchText, prompt: "Search your shelf")
             .navigationDestination(for: VinylRecord.self) { record in
@@ -79,13 +81,9 @@ struct CollectionView: View {
         } else {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    logoRow
-                        .padding(.horizontal, 20)
-                        .padding(.top, 4)
-
                     header
                         .padding(.horizontal, 20)
-                        .padding(.top, 18)
+                        .padding(.top, 4)
 
                     if genres.count > 1 {
                         genreFilterBar
@@ -110,6 +108,20 @@ struct CollectionView: View {
                     }
                 }
                 .padding(.bottom, 96)
+                .background(
+                    GeometryReader { proxy in
+                        Color.clear.preference(
+                            key: ShelfScrollOffsetKey.self,
+                            value: proxy.frame(in: .named("shelfScroll")).minY
+                        )
+                    }
+                )
+            }
+            .coordinateSpace(name: "shelfScroll")
+            .onPreferenceChange(ShelfScrollOffsetKey.self) { offset in
+                withAnimation(.easeOut(duration: 0.2)) {
+                    isScrolled = offset < -12
+                }
             }
         }
     }
@@ -234,19 +246,22 @@ struct CollectionView: View {
 
     // MARK: - Toolbar & FAB
 
-    /// Full logo lockup — mark + wordmark. Scrolls away with the content
-    /// (only the view toggle stays sticky in the nav bar).
-    private var logoRow: some View {
-        HStack(spacing: 10) {
-            BrandMarkView()
-                .frame(width: 34, height: 34)
+    /// Full logo lockup pinned to the very top-left, above the search bar.
+    /// Fades out once the shelf scrolls, leaving only the view toggle sticky.
+    private var logoToolbarItem: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            HStack(spacing: 8) {
+                BrandMarkView()
+                    .frame(width: 28, height: 28)
 
-            Text("Vinyl Shelf")
-                .font(.vsDisplay(20))
-                .kerning(-0.4)
-                .foregroundStyle(Color.vsTextPrimary)
+                Text("Vinyl Shelf")
+                    .font(.vsDisplay(17))
+                    .kerning(-0.3)
+                    .foregroundStyle(Color.vsTextPrimary)
+            }
+            .opacity(isScrolled ? 0 : 1)
+            .accessibilityHidden(true)
         }
-        .accessibilityHidden(true)
     }
 
     private var viewModeToggle: some ToolbarContent {
@@ -277,6 +292,14 @@ struct CollectionView: View {
         .buttonStyle(VSPressButtonStyle())
         .padding(24)
         .accessibilityLabel("Add a record")
+    }
+}
+
+private struct ShelfScrollOffsetKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
 
