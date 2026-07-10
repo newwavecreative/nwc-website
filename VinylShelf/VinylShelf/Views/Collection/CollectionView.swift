@@ -1,9 +1,10 @@
 import SwiftData
 import SwiftUI
 
-/// "My Shelf" — the collection home per `Design/ui_kits/.../ShelfScreen.jsx`:
-/// mono eyebrow + big record count, genre filter chips, record grid (or the
-/// compact list for large collections). Searchable; floating yellow FAB adds.
+/// "My Shelf" — the collection home per `Design/ui_kits/.../ShelfScreen.jsx`.
+/// Fully custom header (system nav bar hidden): logo lockup + styled search
+/// field + record count + sort scroll away with the content; the grid/list
+/// toggle stays pinned top-right, and the yellow FAB adds records.
 struct CollectionView: View {
     enum ViewMode: String {
         case grid
@@ -21,9 +22,9 @@ struct CollectionView: View {
     @State private var viewModel = CollectionViewModel()
     @State private var searchText = ""
     @State private var selectedGenre: String?
-    @State private var isScrolled = false
     @AppStorage("shelfViewMode") private var viewMode: ViewMode = .grid
     @AppStorage("shelfSortOrder") private var sortOrder: ShelfSort = .mostRecent
+    @FocusState private var isSearchFocused: Bool
 
     private let columns = [GridItem(.adaptive(minimum: 150), spacing: 16)]
 
@@ -41,12 +42,25 @@ struct CollectionView: View {
                 content
                 addButton
             }
+            .overlay(alignment: .topTrailing) {
+                if !records.isEmpty {
+                    viewModeButton
+                        .padding(.trailing, 20)
+                        .padding(.top, 8)
+                }
+            }
             .vsScreenBackground()
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar { logoToolbarItem }
-            .toolbar { viewModeToggle }
-            .searchable(text: $searchText, prompt: "Search your shelf")
+            .toolbar(.hidden, for: .navigationBar)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        isSearchFocused = false
+                    }
+                    .font(.vsBody(15, weight: .semibold))
+                    .foregroundStyle(Color.vsYellow500)
+                }
+            }
             .navigationDestination(for: VinylRecord.self) { record in
                 RecordDetailView(record: record)
             }
@@ -72,18 +86,32 @@ struct CollectionView: View {
     @ViewBuilder
     private var content: some View {
         if records.isEmpty {
-            EmptyStateView(
-                systemImage: "opticaldisc",
-                title: "Your shelf is empty",
-                message: "Let's find your first record — scan a barcode or search.",
-                useBrandMark: true
-            )
+            VStack(alignment: .leading, spacing: 0) {
+                logoRow
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+
+                EmptyStateView(
+                    systemImage: "opticaldisc",
+                    title: "Your shelf is empty",
+                    message: "Let's find your first record — scan a barcode or search.",
+                    useBrandMark: true
+                )
+            }
         } else {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
+                    logoRow
+                        .padding(.horizontal, 20)
+                        .padding(.top, 8)
+
+                    searchField
+                        .padding(.horizontal, 20)
+                        .padding(.top, 14)
+
                     header
                         .padding(.horizontal, 20)
-                        .padding(.top, 4)
+                        .padding(.top, 18)
 
                     if genres.count > 1 {
                         genreFilterBar
@@ -108,22 +136,64 @@ struct CollectionView: View {
                     }
                 }
                 .padding(.bottom, 96)
-                .background(
-                    GeometryReader { proxy in
-                        Color.clear.preference(
-                            key: ShelfScrollOffsetKey.self,
-                            value: proxy.frame(in: .named("shelfScroll")).minY
-                        )
-                    }
-                )
             }
-            .coordinateSpace(name: "shelfScroll")
-            .onPreferenceChange(ShelfScrollOffsetKey.self) { offset in
-                withAnimation(.easeOut(duration: 0.2)) {
-                    isScrolled = offset < -12
+            .scrollDismissesKeyboard(.interactively)
+        }
+    }
+
+    /// Full logo lockup — scrolls away with the content.
+    private var logoRow: some View {
+        HStack(spacing: 10) {
+            BrandMarkView()
+                .frame(width: 32, height: 32)
+
+            Text("Vinyl Shelf")
+                .font(.vsDisplay(20))
+                .kerning(-0.4)
+                .foregroundStyle(Color.vsTextPrimary)
+        }
+        .accessibilityHidden(true)
+    }
+
+    /// Design-system search field (mirrors the Search tab's input).
+    private var searchField: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(Color.vsTextMuted)
+
+            TextField(
+                "",
+                text: $searchText,
+                prompt: Text("Search your shelf")
+                    .foregroundStyle(Color.vsTextMuted)
+            )
+            .font(.vsBody(15))
+            .foregroundStyle(Color.vsTextPrimary)
+            .focused($isSearchFocused)
+            .submitLabel(.done)
+            .autocorrectionDisabled()
+
+            if !searchText.isEmpty {
+                Button {
+                    searchText = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(Color.vsTextMuted)
                 }
+                .accessibilityLabel("Clear search")
             }
         }
+        .padding(.horizontal, 14)
+        .frame(height: 48)
+        .background(Color.vsSurfaceRaised, in: RoundedRectangle(cornerRadius: 14))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .strokeBorder(
+                    isSearchFocused ? Color.vsBlue400 : Color.vsBorderSubtle,
+                    lineWidth: 1
+                )
+        )
+        .animation(.easeOut(duration: 0.15), value: isSearchFocused)
     }
 
     private var header: some View {
@@ -150,15 +220,7 @@ struct CollectionView: View {
                 }
             }
         } label: {
-            Image(systemName: "arrow.up.arrow.down")
-                .font(.system(size: 17, weight: .medium))
-                .foregroundStyle(Color.vsTextSecondary)
-                .frame(width: 44, height: 44)
-                .background(Color.vsSurfaceRaised, in: Circle())
-                .overlay(
-                    Circle()
-                        .strokeBorder(Color.vsBorderDefault, lineWidth: 1)
-                )
+            circleButtonLabel(systemImage: "arrow.up.arrow.down")
         }
         .accessibilityLabel("Sort by: \(sortOrder.displayName)")
     }
@@ -244,42 +306,31 @@ struct CollectionView: View {
         .buttonStyle(VSPressButtonStyle())
     }
 
-    // MARK: - Toolbar & FAB
+    // MARK: - Pinned controls & FAB
 
-    /// Full logo lockup pinned to the very top-left, above the search bar.
-    /// Fades out once the shelf scrolls, leaving only the view toggle sticky.
-    private var logoToolbarItem: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
-            HStack(spacing: 8) {
-                BrandMarkView()
-                    .frame(width: 28, height: 28)
-
-                Text("Vinyl Shelf")
-                    .font(.vsDisplay(17))
-                    .kerning(-0.3)
-                    .foregroundStyle(Color.vsTextPrimary)
-                    .lineLimit(1)
+    /// Stays pinned top-right while the header scrolls away.
+    private var viewModeButton: some View {
+        Button {
+            withAnimation(VSMotion.spring) {
+                viewMode = (viewMode == .grid) ? .list : .grid
             }
-            // Keep the toolbar from compressing the lockup and dropping
-            // the wordmark.
-            .fixedSize(horizontal: true, vertical: false)
-            .opacity(isScrolled ? 0 : 1)
-            .accessibilityHidden(true)
+        } label: {
+            circleButtonLabel(systemImage: viewMode == .grid ? "list.bullet" : "square.grid.2x2")
         }
+        .buttonStyle(VSPressButtonStyle())
+        .accessibilityLabel(viewMode == .grid ? "Switch to list view" : "Switch to grid view")
     }
 
-    private var viewModeToggle: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                withAnimation(VSMotion.spring) {
-                    viewMode = (viewMode == .grid) ? .list : .grid
-                }
-            } label: {
-                Image(systemName: viewMode == .grid ? "list.bullet" : "square.grid.2x2")
-                    .foregroundStyle(Color.vsTextSecondary)
-            }
-            .accessibilityLabel(viewMode == .grid ? "Switch to list view" : "Switch to grid view")
-        }
+    private func circleButtonLabel(systemImage: String) -> some View {
+        Image(systemName: systemImage)
+            .font(.system(size: 17, weight: .medium))
+            .foregroundStyle(Color.vsTextSecondary)
+            .frame(width: 44, height: 44)
+            .background(Color.vsSurfaceRaised, in: Circle())
+            .overlay(
+                Circle()
+                    .strokeBorder(Color.vsBorderDefault, lineWidth: 1)
+            )
     }
 
     private var addButton: some View {
@@ -296,14 +347,6 @@ struct CollectionView: View {
         .buttonStyle(VSPressButtonStyle())
         .padding(24)
         .accessibilityLabel("Add a record")
-    }
-}
-
-private struct ShelfScrollOffsetKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
     }
 }
 
