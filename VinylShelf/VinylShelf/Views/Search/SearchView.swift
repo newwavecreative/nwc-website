@@ -25,6 +25,17 @@ struct SearchView: View {
         }
         .vsScreenBackground()
         .toolbar(.hidden, for: .navigationBar)
+        .toolbar {
+            // Accessory bar above the keyboard — explicit dismiss.
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    isSearchFocused = false
+                }
+                .font(.vsBody(15, weight: .semibold))
+                .foregroundStyle(Color.vsYellow500)
+            }
+        }
         .navigationDestination(for: DiscogsRelease.self) { release in
             ReleasePreviewLoaderView(releaseID: release.id) {
                 if isModal { dismiss() }
@@ -108,58 +119,82 @@ struct SearchView: View {
     private var results: some View {
         switch viewModel.state {
         case .idle:
-            VStack(spacing: 0) {
-                EmptyStateView(
-                    systemImage: "magnifyingglass",
-                    title: "Search For Vinyl",
-                    message: "Find releases by artist, album title, or catalog number."
-                )
-
-                // Required attribution per the Discogs API terms.
-                Text("Data provided by Discogs")
-                    .font(.vsMono(11))
-                    .kerning(0.4)
-                    .foregroundStyle(Color.vsTextMuted)
-                    .padding(.bottom, 20)
-            }
+            idleState
         case .loading:
             LoadingView(message: "Digging through the crates…")
         case .loaded(let releases):
             if releases.isEmpty {
-                EmptyStateView(
-                    systemImage: "questionmark.circle",
-                    title: "No matches",
-                    message: "Nothing matched \"\(viewModel.query)\". Try artist and album together."
-                )
+                noMatchesState
             } else {
-                ScrollView {
-                    LazyVStack(spacing: 10) {
-                        ForEach(releases) { release in
-                            NavigationLink(value: release) {
-                                SearchResultRowView(release: release)
-                            }
-                            .buttonStyle(VSPressButtonStyle())
-                            .onAppear {
-                                viewModel.loadMoreIfNeeded(after: release)
-                            }
-                        }
-
-                        if viewModel.isLoadingMore {
-                            ProgressView()
-                                .tint(Color.vsYellow500)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 12)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 16)
-                }
+                resultsList(releases)
             }
         case .failed(let error):
             ErrorView(error: error) {
                 viewModel.retry()
             }
         }
+    }
+
+    private var idleState: some View {
+        VStack(spacing: 0) {
+            EmptyStateView(
+                systemImage: "magnifyingglass",
+                title: "Search For Vinyl",
+                message: "Find releases by artist, album title, or catalog number."
+            )
+
+            // Required attribution per the Discogs API terms.
+            Text("Data provided by Discogs")
+                .font(.vsMono(11))
+                .kerning(0.4)
+                .foregroundStyle(Color.vsTextMuted)
+                .padding(.bottom, 20)
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            // Tap outside the field to drop the keyboard.
+            isSearchFocused = false
+        }
+    }
+
+    private var noMatchesState: some View {
+        EmptyStateView(
+            systemImage: "questionmark.circle",
+            title: "No matches",
+            message: "Nothing matched \"\(viewModel.query)\". Try artist and album together."
+        )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isSearchFocused = false
+        }
+    }
+
+    private func resultsList(_ releases: [DiscogsRelease]) -> some View {
+        ScrollView {
+            LazyVStack(spacing: 10) {
+                ForEach(releases) { release in
+                    NavigationLink(value: release) {
+                        SearchResultRowView(release: release)
+                    }
+                    .buttonStyle(VSPressButtonStyle())
+                    .onAppear {
+                        viewModel.loadMoreIfNeeded(after: release)
+                    }
+                }
+
+                if viewModel.isLoadingMore {
+                    ProgressView()
+                        .tint(Color.vsYellow500)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+        }
+        // Dragging the results pulls the keyboard down with the scroll,
+        // like Messages.
+        .scrollDismissesKeyboard(.interactively)
     }
 }
 
