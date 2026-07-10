@@ -3,6 +3,13 @@ import SwiftUI
 /// "Add a record" — debounced Discogs search per `SearchScreen.jsx`.
 /// Lives in its own tab and is also presented modally from the shelf's "+"
 /// button (`isModal` adds a Cancel affordance).
+///
+/// Resting layout centers the search field in thumb reach (title above,
+/// helper copy below); focusing the field or running a search collapses the
+/// hero framing so the field sits at the top above results. The field itself
+/// is a single stable view — only its surroundings change — which keeps
+/// focus intact (two swapped field instances previously caused a focus/
+/// layout update cycle that froze the tab).
 struct SearchView: View {
     var isModal = false
 
@@ -10,11 +17,7 @@ struct SearchView: View {
     @State private var isShowingScanner = false
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isSearchFocused: Bool
-    @Namespace private var searchFieldNamespace
 
-    /// Resting layout: field mid-screen (thumb-reachable) between the title
-    /// and helper copy. Focusing the field or having an active search slides
-    /// it to the top where results need it.
     private var isHero: Bool {
         guard case .idle = viewModel.state else { return false }
         return viewModel.query.isEmpty && !isSearchFocused
@@ -27,13 +30,44 @@ struct SearchView: View {
                 .padding(.top, 12)
 
             if isHero {
-                heroSearch
-            } else {
-                searchField
-                    .matchedGeometryEffect(id: "searchField", in: searchFieldNamespace)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 12)
+                Spacer()
 
+                VStack(spacing: 18) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 36))
+                        .foregroundStyle(Color.vsTextMuted)
+
+                    Text("Search For Vinyl")
+                        .font(.vsDisplay(20))
+                        .foregroundStyle(Color.vsTextPrimary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 6)
+            }
+
+            searchField
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+
+            if isHero {
+                Text("Find releases by artist, album title, or catalog number.")
+                    .font(.vsBody(15))
+                    .foregroundStyle(Color.vsTextSecondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 44)
+                    .padding(.top, 18)
+
+                Spacer()
+
+                // Required attribution per the Discogs API terms.
+                Text("Data provided by Discogs")
+                    .font(.vsMono(11))
+                    .kerning(0.4)
+                    .foregroundStyle(Color.vsTextMuted)
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 20)
+            } else {
                 activeContent
             }
         }
@@ -128,44 +162,6 @@ struct SearchView: View {
                 )
         )
         .animation(.easeOut(duration: 0.15), value: isSearchFocused)
-    }
-
-    /// Resting empty state: title → search field → helper copy, centered in
-    /// comfortable thumb reach.
-    private var heroSearch: some View {
-        VStack(spacing: 0) {
-            Spacer()
-
-            VStack(spacing: 18) {
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 36))
-                    .foregroundStyle(Color.vsTextMuted)
-
-                Text("Search For Vinyl")
-                    .font(.vsDisplay(20))
-                    .foregroundStyle(Color.vsTextPrimary)
-
-                searchField
-                    .matchedGeometryEffect(id: "searchField", in: searchFieldNamespace)
-
-                Text("Find releases by artist, album title, or catalog number.")
-                    .font(.vsBody(15))
-                    .foregroundStyle(Color.vsTextSecondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
-            }
-            .padding(.horizontal, 20)
-
-            Spacer()
-
-            // Required attribution per the Discogs API terms.
-            Text("Data provided by Discogs")
-                .font(.vsMono(11))
-                .kerning(0.4)
-                .foregroundStyle(Color.vsTextMuted)
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, 20)
-        }
     }
 
     /// Content below the top-pinned field once the search is live.
