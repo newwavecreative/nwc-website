@@ -7,6 +7,7 @@ struct SearchView: View {
     var isModal = false
 
     @State private var viewModel = SearchViewModel()
+    @State private var isShowingScanner = false
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isSearchFocused: Bool
 
@@ -28,6 +29,9 @@ struct SearchView: View {
             ReleasePreviewLoaderView(releaseID: release.id) {
                 if isModal { dismiss() }
             }
+        }
+        .fullScreenCover(isPresented: $isShowingScanner) {
+            ScannerFlowView()
         }
     }
 
@@ -75,6 +79,17 @@ struct SearchView: View {
                 }
                 .accessibilityLabel("Clear search")
             }
+
+            Button {
+                isSearchFocused = false
+                isShowingScanner = true
+            } label: {
+                Image(systemName: "barcode.viewfinder")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundStyle(Color.vsYellow500)
+            }
+            .buttonStyle(VSPressButtonStyle())
+            .accessibilityLabel("Scan a barcode")
         }
         .padding(.horizontal, 14)
         .frame(height: 48)
