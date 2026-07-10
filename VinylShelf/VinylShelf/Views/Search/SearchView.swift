@@ -74,17 +74,6 @@ struct SearchView: View {
         .animation(VSMotion.spring, value: isHero)
         .vsScreenBackground()
         .toolbar(.hidden, for: .navigationBar)
-        .toolbar {
-            // Accessory bar above the keyboard — explicit dismiss.
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    isSearchFocused = false
-                }
-                .font(.vsBody(15, weight: .semibold))
-                .foregroundStyle(Color.vsYellow500)
-            }
-        }
         .navigationDestination(for: DiscogsRelease.self) { release in
             ReleasePreviewLoaderView(releaseID: release.id) {
                 if isModal { dismiss() }
@@ -112,7 +101,25 @@ struct SearchView: View {
         }
     }
 
+    /// Field plus a Done affordance that slides in while focused (keyboard
+    /// accessory toolbars are unreliable with a hidden navigation bar).
     private var searchField: some View {
+        HStack(spacing: 12) {
+            fieldBox
+
+            if isSearchFocused {
+                Button("Done") {
+                    isSearchFocused = false
+                }
+                .font(.vsBody(15, weight: .semibold))
+                .foregroundStyle(Color.vsYellow500)
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+            }
+        }
+        .animation(.easeOut(duration: 0.2), value: isSearchFocused)
+    }
+
+    private var fieldBox: some View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(Color.vsTextMuted)

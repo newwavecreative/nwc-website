@@ -51,16 +51,6 @@ struct CollectionView: View {
             }
             .vsScreenBackground()
             .toolbar(.hidden, for: .navigationBar)
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("Done") {
-                        isSearchFocused = false
-                    }
-                    .font(.vsBody(15, weight: .semibold))
-                    .foregroundStyle(Color.vsYellow500)
-                }
-            }
             .navigationDestination(for: VinylRecord.self) { record in
                 RecordDetailView(record: record)
             }
@@ -155,8 +145,25 @@ struct CollectionView: View {
         .accessibilityHidden(true)
     }
 
-    /// Design-system search field (mirrors the Search tab's input).
+    /// Design-system search field (mirrors the Search tab's input), with a
+    /// Done affordance sliding in while focused.
     private var searchField: some View {
+        HStack(spacing: 12) {
+            fieldBox
+
+            if isSearchFocused {
+                Button("Done") {
+                    isSearchFocused = false
+                }
+                .font(.vsBody(15, weight: .semibold))
+                .foregroundStyle(Color.vsYellow500)
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+            }
+        }
+        .animation(.easeOut(duration: 0.2), value: isSearchFocused)
+    }
+
+    private var fieldBox: some View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(Color.vsTextMuted)
