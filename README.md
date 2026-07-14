@@ -100,3 +100,39 @@ preview from the partial:
 Navbar · Hero · CTA band · Logo marquee · About · Flip cards · Count-up stats ·
 Programs (×3) · Blog cards · Comparison table · Pricing · Bento "How It Works" ·
 Testimonials marquee · Final CTA · Footer.
+
+---
+
+# RYM Authority Hub (second plugin in this repo)
+
+`rym-authority-hub/` is a second self-contained plugin, converted 1:1 from the
+Lovable prototype at rym-authority-hub.lovable.app (Replace Your Mortgage /
+Replace Your University landing page). Same pattern as `nwc-landing`: it
+registers an **"RYM Authority Hub"** page template and loads its CSS/JS only on
+pages that select it.
+
+```
+rym-authority-hub/
+  rym-authority-hub.php            registers the template + enqueues assets
+  templates/page-template.php      full-page document (own header/footer)
+  template-parts/page.php          all page markup (captured from the prototype)
+  assets/
+    css/styles.css                 compiled Tailwind from the prototype + small
+                                   "WordPress conversion helpers" layer at the end
+    js/main.js                     vanilla-JS port of the React behavior: nav
+                                   dropdowns, mobile drawer, rate tabs, reviews
+                                   carousel, loan-estimate lightbox, training modal
+    img/                           all page imagery (self-hosted)
+```
+
+To use: activate the plugin, create a page, set *Page Attributes → Template* to
+**"RYM Authority Hub."**
+
+Notes:
+- Every training CTA opens the lead-capture modal, exactly like the prototype.
+  The form is still a stub (the prototype fakes success too) — wire it to a CRM
+  or webhook in `submitLead()` inside `assets/js/main.js`.
+- Deployment: `.github/workflows/deploy.yml` currently rsyncs only
+  `nwc-landing/`. Add a second deploy step with `SRC_PATH: "rym-authority-hub/"`
+  and `REMOTE_PATH: "wp-content/plugins/rym-authority-hub/"` (on the target
+  WP Engine install) when you're ready to ship this one.
